@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AWS Modernization Workshop on Self-Paced</title>
+    <link>/</link>
+    <description>Recent content in AWS Modernization Workshop on Self-Paced</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AWS Account Setup</title>
+      <link>/030_self_guided_setup/30_aws_setup_your_own.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/030_self_guided_setup/30_aws_setup_your_own.html</guid>
+      <description>Setting up your AWS account  You are responsible for the cost of the AWS services used while running this workshop in your AWS account. We highly recommend you to go to the request AWS credit page so you can run this workshop without any charge to you.
+  If you don&amp;rsquo;t already have an AWS account with Administrator access: create one now by clicking here
+ Once you have an AWS account, ensure you are following the remaining workshop steps as an IAM user with administrator access to the AWS account: Create a new IAM user to use for the workshop</description>
+    </item>
+    
+    <item>
+      <title>Foreword</title>
+      <link>/010_introduction/10_foreword.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/010_introduction/10_foreword.html</guid>
+      <description>How did we get here/Foreword Add Partner logo. Add a brief intro to the story of what the industry is dealing with:
+Follow these examples: 1. https://circleci.awsworkshop.io/010_introduction/10_foreword.html 1. https://harness.awsworkshop.io/010_introduction/10_foreword.html</description>
+    </item>
+    
+    <item>
+      <title>The Challenge</title>
+      <link>/010_introduction/12_problem_to_solve.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/010_introduction/12_problem_to_solve.html</guid>
+      <description> The Problem What is Kong solving This is where you describe the use case/technical challenge that Kong is solving. Explain the importance of these issues
+Examples:
+ https://harness.awsworkshop.io/010_introduction/12_problem_to_solve.html https://circleci.awsworkshop.io/010_introduction/12_problem_to_solve.html  </description>
+    </item>
+    
+    <item>
+      <title>4. Create a Workspace</title>
+      <link>/030_self_guided_setup/32_start_cloud9workspace.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/030_self_guided_setup/32_start_cloud9workspace.html</guid>
+      <description>Set up the Workspace AWS Cloud9 is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser. It includes a code editor, debugger, and terminal. Cloud9 comes prepackaged with essential tools for popular programming languages, including JavaScript, Python, PHP, and more, so you don’t need to install files or configure your laptop for this workshop.
+We will use Amazon Cloud9 to access our AWS accounts via the AWS CLI in this Workshop.</description>
+    </item>
+    
+    <item>
+      <title>What is Kong?</title>
+      <link>/010_introduction/14_partner.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/010_introduction/14_partner.html</guid>
+      <description> Some title about Kong Enabling Secure, Reliable, and Safe Deployments at Scale Talk about Kong!!
+Examples:
+ https://armory.awsworkshop.io/010_introduction/14_partner.html https://harness.awsworkshop.io/010_introduction/14_harness.html  </description>
+    </item>
+    
+    <item>
+      <title>5. Create an IAM role for your workspace</title>
+      <link>/030_self_guided_setup/34_create_iam_role.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/030_self_guided_setup/34_create_iam_role.html</guid>
+      <description>Starting from here, when you see command to be entered such as below, you will enter these commands into Cloud9 IDE. You can use the Copy to clipboard feature (right hand upper corner) to simply copy and paste into Cloud9. In order to paste, you can use Ctrl + V for Windows or Command + V for Mac.
+  Follow this deep link to create an IAM role with Administrator access.</description>
+    </item>
+    
+    <item>
+      <title>6. Attach IAM Role</title>
+      <link>/030_self_guided_setup/36_attach_iam_role.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/030_self_guided_setup/36_attach_iam_role.html</guid>
+      <description> Attach the IAM role to your instance Will need
+ Follow this deep link to find your Cloud9 EC2 instance
+ Select the instance, then choose Actions / Security / Modify IAM role
+ Choose the role that we created in the previous step: CircleCI-Workshop-Admin.
+ Click Save
+  </description>
+    </item>
+    
+    <item>
+      <title>Workshop Prerequisites</title>
+      <link>/010_introduction/16_workshop_prerequisites.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/010_introduction/16_workshop_prerequisites.html</guid>
+      <description>Workshop Prerequisites There are a few prerequisite tasks you must perform before getting started on this workshop. These are:
+ Access to an AWS account with proper permissions. A Cloud9 IDE Workspace Kong setup (add more detailed instructions here).  In the next section, you will be instructed on how to configure all the prerequisite task stated above.</description>
+    </item>
+    
+    <item>
+      <title>7. Configure workshop specific requirements</title>
+      <link>/030_self_guided_setup/38_config_workshop_req.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/030_self_guided_setup/38_config_workshop_req.html</guid>
+      <description>Configure Workspace  Return to your workspace and click the gear icon (in top right corner), or click to open a new tab and choose &amp;ldquo;Open Preferences&amp;rdquo;
+ Select AWS SETTINGS and turn off AWS managed temporary credentials
+ Close the Preferences tab
+ Copy and run (paste with Ctrl+P or CMD+P) the commands below.
+Before running it, review what it does by reading through the comments.
+# Update awscli sudo pip install --upgrade awscli &amp;amp;&amp;amp; hash -r # Install jq command-line tool for parsing JSON, and bash-completion sudo yum -y install jq gettext bash-completion moreutils # Install yq for yaml processing echo &amp;#39;yq() { docker run --rm -i -v &amp;#34;${PWD}&amp;#34;:/workdir mikefarah/yq yq &amp;#34;$@&amp;#34; }&amp;#39; | tee -a ~/.</description>
+    </item>
+    
+  </channel>
+</rss>
