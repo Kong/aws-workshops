@@ -32,6 +32,14 @@ helm uninstall prometheus -n prometheus
 kubectl delete namespace prometheus
 </pre>
 
+## Uninstall Redis
+<pre>
+kubectl delete deployment redis -n redis
+kubectl delete service redis -n redis
+
+kubectl delete namespace redis
+</pre>
+
 ## Uninstall Kong for Kubernetes
 <pre>
 kubectl delete ingress route1
