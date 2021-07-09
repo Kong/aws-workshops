@@ -24,9 +24,13 @@ First of all, let's install Prometheus Operator with its specific Helm Charts. N
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
 helm repo update
+```
 
+```
 kubectl create namespace prometheus
+```
 
+```
 helm install prometheus -n prometheus prometheus-community/kube-prometheus-stack \
 --set alertmanager.service.type=LoadBalancer \
 --set prometheus.service.type=LoadBalancer \
@@ -36,26 +40,26 @@ helm install prometheus -n prometheus prometheus-community/kube-prometheus-stack
 Use should see several new Pods and Services after the installations
 ```
 $ kubectl get service -n prometheus
-NAME                                      TYPE           CLUSTER-IP       EXTERNAL-IP                                                                  PORT(S)                      AGE
-alertmanager-operated                     ClusterIP      None             <none>                                                                       9093/TCP,9094/TCP,9094/UDP   14h
-prometheus-grafana                        LoadBalancer   10.100.52.93     a3231e63c5f284371b28348dddccc3e9-1485311067.eu-central-1.elb.amazonaws.com   80:30939/TCP                 14h
-prometheus-kube-prometheus-alertmanager   LoadBalancer   10.100.163.45    aa657c68605e641febc82f2dc667e749-371854775.eu-central-1.elb.amazonaws.com    9093:32157/TCP               14h
-prometheus-kube-prometheus-operator       ClusterIP      10.100.238.255   <none>                                                                       443/TCP                      14h
-prometheus-kube-prometheus-prometheus     LoadBalancer   10.100.89.207    a6392e24d9988443bbf880c07183ae2d-181425551.eu-central-1.elb.amazonaws.com    9090:31791/TCP               14h
-prometheus-kube-state-metrics             ClusterIP      10.100.136.77    <none>                                                                       8080/TCP                     14h
-prometheus-operated                       ClusterIP      None             <none>                                                                       9090/TCP                     14h
-prometheus-prometheus-node-exporter       ClusterIP      10.100.219.251   <none>                                                                       9100/TCP                     14h
+NAME                                      TYPE           CLUSTER-IP       EXTERNAL-IP                                                                 PORT(S)                      AGE
+alertmanager-operated                     ClusterIP      None             <none>                                                                      9093/TCP,9094/TCP,9094/UDP   26m
+prometheus-grafana                        LoadBalancer   10.100.204.248   ae1ec0bd5f24349d29915b384b0e357f-301715715.eu-central-1.elb.amazonaws.com   80:31331/TCP                 27m
+prometheus-kube-prometheus-alertmanager   LoadBalancer   10.100.98.34     a8bc14bcf3eb34ce4bd6b1607be191f8-225304004.eu-central-1.elb.amazonaws.com   9093:31094/TCP               27m
+prometheus-kube-prometheus-operator       ClusterIP      10.100.0.147     <none>                                                                      443/TCP                      27m
+prometheus-kube-prometheus-prometheus     LoadBalancer   10.100.160.161   a49dce814ab2f40f3b34ae942e02bf4b-931182925.eu-central-1.elb.amazonaws.com   9090:30701/TCP               27m
+prometheus-kube-state-metrics             ClusterIP      10.100.23.71     <none>                                                                      8080/TCP                     27m
+prometheus-operated                       ClusterIP      None             <none>                                                                      9090/TCP                     26m
+prometheus-prometheus-node-exporter       ClusterIP      10.100.130.95    <none>                                                                      9100/TCP                     27m
 ```
 
 ```
 $ kubectl get pod -n prometheus
 NAME                                                     READY   STATUS    RESTARTS   AGE
-alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   0          14h
-prometheus-grafana-7ff95c75bd-5bx7x                      2/2     Running   0          14h
-prometheus-kube-prometheus-operator-59c5dcf5bc-h4glf     1/1     Running   0          14h
-prometheus-kube-state-metrics-84dfc44b69-5hplx           1/1     Running   0          14h
-prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running   1          14h
-prometheus-prometheus-node-exporter-sn66l                1/1     Running   0          14h
+alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   0          27m
+prometheus-grafana-7ff95c75bd-vkkzp                      2/2     Running   0          27m
+prometheus-kube-prometheus-operator-59c5dcf5bc-vwbpp     1/1     Running   0          27m
+prometheus-kube-state-metrics-84dfc44b69-nl5n9           1/1     Running   0          27m
+prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running   1          27m
+prometheus-prometheus-node-exporter-jtzts                1/1     Running   0          27m
 ```
 
 
@@ -65,11 +69,11 @@ prometheus-prometheus-node-exporter-sn66l                1/1     Running   0    
 ### Check Prometheus
 Get the Prometheus' Load Balancer address
 <pre>
-kubectl get service prometheus-kube-prometheus-prometheus -n prometheus --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-a6392e24d9988443bbf880c07183ae2d-181425551.eu-central-1.elb.amazonaws.com
+$ kubectl get service prometheus-kube-prometheus-prometheus -n prometheus \-\-output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+a49dce814ab2f40f3b34ae942e02bf4b-931182925.eu-central-1.elb.amazonaws.com
 </pre>
 
-Redirect your browser to [it](http://a6392e24d9988443bbf880c07183ae2d-181425551.eu-central-1.elb.amazonaws.com:9090)
+Redirect your browser to http://a49dce814ab2f40f3b34ae942e02bf4b-931182925.eu-central-1.elb.amazonaws.com:9090
 
 ![prometheus](/images/prometheus.png)
 
@@ -78,8 +82,8 @@ Redirect your browser to [it](http://a6392e24d9988443bbf880c07183ae2d-181425551.
 ### Check Grafana
 Do the same thing for Grafana
 <pre>
-kubectl get service prometheus-grafana -n prometheus --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-a3231e63c5f284371b28348dddccc3e9-1485311067.eu-central-1.elb.amazonaws.com
+$ kubectl get service prometheus-grafana -n prometheus \-\-output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+ae1ec0bd5f24349d29915b384b0e357f-301715715.eu-central-1.elb.amazonaws.com
 </pre>
 
 Get Grafana admin's password:
@@ -88,7 +92,7 @@ $ kubectl get secret prometheus-grafana -n prometheus -o jsonpath="{.data.admin-
 prom-operator
 </pre>
 
-Redirect your browser to [it](http://a3231e63c5f284371b28348dddccc3e9-1485311067.eu-central-1.elb.amazonaws.com). Use the <b>admin</b> id with the password we got.
+Redirect your browser to it: http://ae1ec0bd5f24349d29915b384b0e357f-301715715.eu-central-1.elb.amazonaws.com. Use the <b>admin</b> id with the password we got.
 
 ![grafana](/images/grafana.png)
 
@@ -107,13 +111,13 @@ In order to monitor the Kong Data Planes replicas we're going to configure a Ser
 
 
 ### Create a Global Prometheus plugin
-First of all we have to configure the specific Prometheus plugin provided by Kong. After submitting the following declaration, all Ingresses defined will have the plugin enabled and, therefore, include their metrics on the Prometheus endpoint exposed by Kong Data Plane.
+First of all we have to configure the specific Prometheus plugin provided by Kong. After submitting the following declaration, all Ingresses defined will have the plugin enabled and, therefore, include their metrics on the Prometheus endpoint exposed by the Kong Data Plane.
 ```
 cat <<EOF | kubectl apply -f -
 apiVersion: configuration.konghq.com/v1
 kind: KongClusterPlugin
 metadata:
-  name: prometheus-plugin
+  name: prometheus
   annotations:
     kubernetes.io/ingress.class: kong
   labels:
@@ -123,9 +127,9 @@ EOF
 ```
 
 ### Expose the Data Plane metrics endpoint with a Kubernetes Service
-The first thing to do is to expose the Data Plane metrics port as a new Kubernetes Service. The new Kubernetes Service will be consumed by the Prometheus Service Monitor we're going to configure later.
+The next thing to do is to expose the Data Plane metrics port as a new Kubernetes Service. The new Kubernetes Service will be consumed by the Prometheus Service Monitor we're going to configure later.
 
-The new Kubernetes Service will consume the metrics port 8100 provided by the Data Plane. We set the port during the Data Plane installation using the parameter <b>--set env.status_listen=0.0.0.0:8100</b>. You can check the port running:
+The new Kubernetes Service will be based on the metrics port 8100 provided by the Data Plane. We set the port during the Data Plane installation using the parameter <b>\-\-set env.status_listen=0.0.0.0:8100</b>. You can check the port running:
 
 ````
 $ kubectl describe pod kong-dp-kong -n kong-dp | grep Ports
@@ -160,29 +164,31 @@ Note that the new Kubernetes Service is selecting the existing Data Plane Kubern
 Use can check the label running:
 ```
 $ kubectl get service -n kong-dp -o wide
-NAME                 TYPE           CLUSTER-IP       EXTERNAL-IP                                                                 PORT(S)                      AGE   SELECTOR
-kong-dp-kong-proxy   LoadBalancer   10.100.169.234   a709304ada39d4c43a45eb22d27e4b8c-161423680.eu-central-1.elb.amazonaws.com   80:32203/TCP,443:30361/TCP   18h   app.kubernetes.io/component=app,app.kubernetes.io/instance=kong-dp,app.kubernetes.io/name=kong
+NAME                 TYPE           CLUSTER-IP     EXTERNAL-IP                                                                  PORT(S)                      AGE   SELECTOR
+kong-dp-kong-proxy   LoadBalancer   10.100.12.30   a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP   53m   app.kubernetes.io/component=app,app.kubernetes.io/instance=kong-dp,app.kubernetes.io/name=kong
 ```
 
 
 After submitting the declaration you should see the new Kubernetes Service:
 ```
 $ kubectl get service -n kong-dp
-NAME                 TYPE           CLUSTER-IP       EXTERNAL-IP                                                                 PORT(S)                      AGE
-kong-dp-kong-proxy   LoadBalancer   10.100.169.234   a709304ada39d4c43a45eb22d27e4b8c-161423680.eu-central-1.elb.amazonaws.com   80:32203/TCP,443:30361/TCP   19h
-kong-dp-monitoring   ClusterIP      10.100.212.247   <none>                                                                      8100/TCP                     2s
+NAME                 TYPE           CLUSTER-IP     EXTERNAL-IP                                                                  PORT(S)                      AGE
+kong-dp-kong-proxy   LoadBalancer   10.100.12.30   a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP   54m
+kong-dp-monitoring   ClusterIP      10.100.91.54   <none>                                                                       8100/TCP                     66s
 ```
 
 
 
 ### Test the service.
 
-Expose the port 8100 using <b>port-forward</b>
+On one local terminal, expose the port 8100 using <b>port-forward</b>
 ```
 $ kubectl port-forward service/kong-dp-monitoring -n kong-dp 8100
 Forwarding from 127.0.0.1:8100 -> 8100
 Forwarding from [::1]:8100 -> 8100
 ```
+
+On another terminal send a request to it:
 
 <pre>
 $ http :8100/metrics
@@ -190,37 +196,25 @@ HTTP/1.1 200 OK
 Access-Control-Allow-Origin: *
 Connection: keep-alive
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 30 Jun 2021 19:02:57 GMT
+Date: Thu, 08 Jul 2021 16:38:26 GMT
 Server: kong/2.4.1.1-enterprise-edition
 Transfer-Encoding: chunked
 X-Kong-Admin-Latency: 3
 
-# HELP kong_bandwidth Total bandwidth in bytes consumed per service/route in Kong
-# TYPE kong_bandwidth counter
-kong_bandwidth{service="default.route1-ext.pnum-80",route="default.route1.00",type="egress"} 0
-kong_bandwidth{service="default.route1-ext.pnum-80",route="default.route1.00",type="ingress"} 0
 # HELP kong_datastore_reachable Datastore reachable from Kong, 0 is unreachable
 # TYPE kong_datastore_reachable gauge
 kong_datastore_reachable 1
-# HELP kong_enterprise_license_expiration Unix epoch time when the license expires, the timestamp is substracted by 24 hours to avoid difference in timezone
-# TYPE kong_enterprise_license_expiration gauge
-kong_enterprise_license_expiration 1653998400
-# HELP kong_enterprise_license_features License features features
-# TYPE kong_enterprise_license_features gauge
-kong_enterprise_license_features{feature="ee_plugins"} 1
-kong_enterprise_license_features{feature="write_admin_api"} 1
-# HELP kong_enterprise_license_signature Last 32 bytes of the license signautre in number
-# TYPE kong_enterprise_license_signature gauge
-kong_enterprise_license_signature 3.5512300986528e+40
-# HELP kong_http_status HTTP status codes per service/route in Kong
-# TYPE kong_http_status counter
-kong_http_status{service="default.route1-ext.pnum-80",route="default.route1.00",code="200"} 0
-# HELP kong_latency Latency added by Kong, total request time and upstream latency for each service/route in Kong
+# HELP kong_enterprise_license_errors Errors when collecting license info
+# TYPE kong_enterprise_license_errors counter
+kong_enterprise_license_errors 1
+# HELP kong_memory_lua_shared_dict_bytes Allocated slabs in bytes in a shared_dict
+# TYPE kong_memory_lua_shared_dict_bytes gauge
+kong_memory_lua_shared_dict_bytes{shared_dict="kong"} 40960
 ………….
 </pre>
 
 ### Create the Prometheus Service Monitor
-Now, let's create the Prometheus Service Monitor collecting metrics from all Data Planes instances:
+Now, let's create the Prometheus Service Monitor collecting metrics from all Data Planes instances. The Service Monitor is based on the new <b>kong-dp-monitoring</b> Kubernetes Service we created before:
 
 ```
 cat <<EOF | kubectl apply -f -
@@ -243,7 +237,7 @@ EOF
 ```
 
 ### Starting a Prometheus instance for the Kong Data Plane
-The Prometheus instance will be created using a specific "kong-prometheus" account. Before doing it, we need to create the account and grant specific permissions.
+A specific Prometheus instance will be created to monitor the Kong Data Plane using a specific "kong-prometheus" account. Before doing it, we need to create the account and grant specific permissions.
 
 ````
 cat <<EOF | kubectl apply -f -
@@ -253,7 +247,9 @@ metadata:
   name: kong-prometheus
   namespace: kong-dp
 EOF
+````
 
+````
 cat <<EOF | kubectl apply -f -
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
@@ -280,8 +276,9 @@ rules:
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
 EOF
+````
 
-
+````
 cat <<EOF | kubectl apply -f -
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -322,16 +319,36 @@ Check the Installation
 ````
 $ kubectl get pod -n kong-dp
 NAME                              READY   STATUS    RESTARTS   AGE
-kong-dp-kong-58f7b865fb-btktv     1/1     Running   0          16h
-prometheus-kong-dp-prometheus-0   2/2     Running   1          22s
+kong-dp-kong-67c5c7d4c5-n2cv6     1/1     Running   0          44m
+prometheus-kong-dp-prometheus-0   2/2     Running   1          3m39s
+````
 
+````
 $ kubectl get service -n kong-dp
-NAME                  TYPE           CLUSTER-IP       EXTERNAL-IP                                                                 PORT(S)                      AGE
-kong-dp-kong-proxy    LoadBalancer   10.100.169.234   a709304ada39d4c43a45eb22d27e4b8c-161423680.eu-central-1.elb.amazonaws.com   80:32203/TCP,443:30361/TCP   19h
-kong-dp-monitoring    ClusterIP      10.100.212.247   <none>                                                                      8100/TCP                     9m55s
-prometheus-operated   ClusterIP      None             <none>                                                                      9090/TCP                     2m7s
+NAME                  TYPE           CLUSTER-IP     EXTERNAL-IP                                                                  PORT(S)                      AGE
+kong-dp-kong-proxy    LoadBalancer   10.100.12.30   a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP   61m
+kong-dp-monitoring    ClusterIP      10.100.91.54   <none>                                                                       8100/TCP                     7m50s
+prometheus-operated   ClusterIP      None           <none>                                                                       9090/TCP                     3m54s
+````
 
+````
 $ kubectl get prometheus -n kong-dp
 NAME                 VERSION   REPLICAS   AGE
-kong-dp-prometheus                        2m21s
+kong-dp-prometheus                        4m8s
+````
+
+
+Expose the new Prometheus service
+````
+$ kubectl expose service prometheus-operated --name prometheus-operated-lb --type=LoadBalancer -n kong-dp
+service/prometheus-operated-lb exposed
+````
+
+````
+$ kubectl get service -n kong-dp
+NAME                     TYPE           CLUSTER-IP      EXTERNAL-IP                                                                  PORT(S)                      AGE
+kong-dp-kong-proxy       LoadBalancer   10.100.12.30    a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP   78m
+kong-dp-monitoring       ClusterIP      10.100.91.54    <none>                                                                       8100/TCP                     24m
+prometheus-operated      ClusterIP      None            <none>                                                                       9090/TCP                     20m
+prometheus-operated-lb   LoadBalancer   10.100.81.131   a6c91b4ef9c9543b285aea42c00fbbb2-2102856654.eu-central-1.elb.amazonaws.com   9090:31259/TCP               4s
 ````

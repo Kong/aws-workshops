@@ -1,7 +1,7 @@
 ---
 title: "3. Attach IAM Role"
 chapter: true
-weight: 14
+weight: 24
 ---
 
 ## Attach the IAM role to your instance

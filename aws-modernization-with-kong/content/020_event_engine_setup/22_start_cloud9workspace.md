@@ -1,7 +1,7 @@
 ---
 title: "2. Create a Workspace"
 chapter: true
-weight: 12
+weight: 22
 ---
 
 ## Set up the Workspace

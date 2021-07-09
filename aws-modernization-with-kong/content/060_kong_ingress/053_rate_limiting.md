@@ -2,13 +2,13 @@
 title: "Rate Limiting Policy Definition"
 chapter: true
 draft: false
-weight: 1
+weight: 3
 ---
 
 
 
 # Rate Limiting Policy Definition
-Since we have the Microservice exposed through a route defined in the Ingress Controller, let's protect it with a Rate Limiting Policy first.
+Now let's protect our upstream service with a Rate Limiting policy.
 
 
 Create the plugin
@@ -33,7 +33,7 @@ $ kubectl delete kongplugin rl-by-minute
 
 Apply the plugin to the route
 ```
-kubectl patch ingress sampleroute -p '{"metadata":{"annotations":{"konghq.com/plugins":"rl-by-minute"}}}'
+kubectl patch ingress sampleroute -p '{"metadata":{"annotations":{"konghq.com/plugins":"proxycache, rl-by-minute"}}}'
 ```
 
 In case you want to disapply the plugin to the ingress run:
@@ -44,40 +44,43 @@ $ kubectl annotate ingress sampleroute konghq.com/plugins-
 
 Test the plugin
 ```
-$ http a709304ada39d4c43a45eb22d27e4b8c-161423680.eu-central-1.elb.amazonaws.com/sampleroute/hello
+$ http a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com/sampleroute/hello
 HTTP/1.1 200 OK
+Age: 6
 Connection: keep-alive
 Content-Length: 45
 Content-Type: text/html; charset=utf-8
-Date: Thu, 01 Jul 2021 21:52:22 GMT
+Date: Thu, 08 Jul 2021 20:53:58 GMT
 RateLimit-Limit: 3
 RateLimit-Remaining: 2
-RateLimit-Reset: 38
+RateLimit-Reset: 2
 Server: Werkzeug/1.0.1 Python/3.7.4
 Via: kong/2.4.1.1-enterprise-edition
-X-Kong-Proxy-Latency: 0
-X-Kong-Upstream-Latency: 2
+X-Cache-Key: f2d45950abe49485a51167bb1d1deae0
+X-Cache-Status: Hit
+X-Kong-Proxy-Latency: 1
+X-Kong-Upstream-Latency: 0
 X-RateLimit-Limit-Minute: 3
 X-RateLimit-Remaining-Minute: 2
 
-Hello World, Kong: 2021-07-01 21:52:22.386798
+Hello World, Kong: 2021-07-08 20:53:58.071403
 ```
 
 
 As expected, we get an error for the 4th request::
 ```
-$ http a709304ada39d4c43a45eb22d27e4b8c-161423680.eu-central-1.elb.amazonaws.com/sampleroute/hello
+$ http a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com/sampleroute/hello
 HTTP/1.1 429 Too Many Requests
 Connection: keep-alive
 Content-Length: 41
 Content-Type: application/json; charset=utf-8
-Date: Thu, 01 Jul 2021 21:52:43 GMT
+Date: Thu, 08 Jul 2021 20:54:09 GMT
 RateLimit-Limit: 3
 RateLimit-Remaining: 0
-RateLimit-Reset: 17
-Retry-After: 17
+RateLimit-Reset: 51
+Retry-After: 51
 Server: kong/2.4.1.1-enterprise-edition
-X-Kong-Response-Latency: 0
+X-Kong-Response-Latency: 1
 X-RateLimit-Limit-Minute: 3
 X-RateLimit-Remaining-Minute: 0
 

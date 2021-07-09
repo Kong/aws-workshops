@@ -17,7 +17,7 @@ Since we have Prometheus and Grafana already deployed where going to consume the
 ### Fortio
 Use Fortio to start injecting some request to the Data Plane
 ````
-$ fortio load -c 120 -qps 2000 -t 0 http://a709304ada39d4c43a45eb22d27e4b8c-161423680.eu-central-1.elb.amazonaws.com/sampleroute/hello
+$ fortio load -c 120 -qps 2000 -t 0 http://a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com/sampleroute/hello
 ````
 
 ### Check Grafana
@@ -45,25 +45,21 @@ kong-dp-kong   Deployment/kong-dp-kong   15%/75%   1         20        3        
 
 ## Kong Data Plane Monitoring
 
-### Expose and consume the new Prometheus Service
-The new Prometheus Service consumes the Data Plane metrics:
-````
-kubectl port-forward service/prometheus-operated -n kong-dp 9090
-````
-
+### Consume the new Prometheus Service
 Get the API consumption rate
 ````
-$ curl -gs 'http://localhost:9090/api/v1/query?query=sum(rate(kong_http_status{code="200"}[1m]))' | jq -r .data.result[].value[1]
+$ curl -gs 'http://a6c91b4ef9c9543b285aea42c00fbbb2-2102856654.eu-central-1.elb.amazonaws.com:9090/api/v1/query?query=sum(rate(kong_http_status{code="200"}[1m]))' | jq -r .data.result[].value[1]
 199.8
 ````
 
 Get the number of successful processed requests
 ````
-$ curl -gs 'http://localhost:9090/api/v1/query?query=kong_http_status{code="200"}' | jq -r .data.result[].value[1]
+$ curl -gs 'http://a6c91b4ef9c9543b285aea42c00fbbb2-2102856654.eu-central-1.elb.amazonaws.com:9090/api/v1/query?query=kong_http_status{code="200"}' | jq -r .data.result[].value[1]
 669973
 ````
 
-Check the new Prometheus instance GUI
+Check the new Prometheus instance GUI redirecting your browser to http://a6c91b4ef9c9543b285aea42c00fbbb2-2102856654.eu-central-1.elb.amazonaws.com:9090
+
 
 ![service_monitor2](/images/service_monitor2.png)
 

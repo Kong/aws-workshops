@@ -7,7 +7,6 @@ weight: 3
 
 # Self-Paced Workshop
 
-
 Welcome to the Self Guided Setup section! This workshop requires an AWS account where there is IAM user/identity that has proper permissions to set up the necessary AWS components to work through the workshop. Worried about costs associated with this workshop? Don't worry, go to the next page and request some AWS credits to pay for any costs that may be incurred through this workshop!
 
 Here is a preview of what we will be setting up:
@@ -28,7 +27,7 @@ Here's a Reference Architecture implemented in AWS:
 
 ![kong](/images/ref_arch.png)
 
-* Both Control Plane and Data Plane runs on an Elastic Kubernetes Service (EKS) Cluster in different namespaces.
+* Both Control Plane and Data Plane run on an Elastic Kubernetes Service (EKS) Cluster in different namespaces.
 * PostgreSQL Database is located behind the CP.
 
 Considering the capabilities provided by the Kubernetes platform, running Data Planes on this platform delivers a powerful environment. Here are some capabilities leveraged by the Data Plane on Kubernetes:

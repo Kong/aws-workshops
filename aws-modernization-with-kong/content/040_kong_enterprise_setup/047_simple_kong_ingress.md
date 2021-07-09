@@ -2,7 +2,7 @@
 title: "Simple Kong Ingress"
 chapter: true
 draft: false
-weight: 6
+weight: 7
 ---
 
 # Kong Ingress
@@ -32,19 +32,19 @@ EOF
 ```
 
 
-### Consume the Ingress
-Sending a single request to the Data Plane to test the Ingress:
+## Consume the Ingress
+Sending a single request to the Data Plane to test the Ingress using the Kong Data Plane ELB:
 ```
-$ http a709304ada39d4c43a45eb22d27e4b8c-161423680.eu-central-1.elb.amazonaws.com/sampleroute/hello
+$ http a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com/sampleroute/hello
 HTTP/1.1 200 OK
 Connection: keep-alive
 Content-Length: 45
 Content-Type: text/html; charset=utf-8
-Date: Thu, 01 Jul 2021 21:40:56 GMT
+Date: Thu, 08 Jul 2021 16:51:01 GMT
 Server: Werkzeug/1.0.1 Python/3.7.4
 Via: kong/2.4.1.1-enterprise-edition
 X-Kong-Proxy-Latency: 0
 X-Kong-Upstream-Latency: 2
 
-Hello World, Kong: 2021-07-01 21:40:56.511564
+Hello World, Kong: 2021-07-08 16:51:01.364655
 ```

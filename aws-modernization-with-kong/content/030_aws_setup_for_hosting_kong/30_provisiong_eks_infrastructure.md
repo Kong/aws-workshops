@@ -5,7 +5,10 @@ weight: 10
 ---
 
 ## Creating an EKS Cluster
-<b>eksctl</b> creates implicitly a specific VPC for our EKS Cluster.
+Before getting started with the workshop, we recommend to have an EKS Cluster already available. If you don't have one, please, follow these instructions.
+
+## Creating an EKS Cluster
+We're going to use [eksctl](https://eksctl.io/) to create our EKS Cluster.
 
 <pre>
 $ eksctl create cluster --name K4K8S --version 1.20 --region eu-central-1 --without-nodegroup
@@ -53,13 +56,15 @@ K4K8S	eu-central-1	True
 </pre>
 
 ## Creating the NodeGroup
+Now let's add a NodeGroup in our Cluster.
+
 <pre>
 $ kubectl get node
 No resources found
 </pre>
 
 <pre>
-$ eksctl create nodegroup --cluster K4K8S --name K4K8S-node --region eu-central-1 --node-type m5.xlarge --nodes 1 --max-pods-per-node 50
+$ eksctl create nodegroup --cluster K4K8S --name K4K8S-node --region eu-central-1 --node-type m5.2xlarge --nodes 1 --max-pods-per-node 50
 2021-07-01 12:18:04 [ℹ]  eksctl version 0.54.0
 2021-07-01 12:18:04 [ℹ]  using region eu-central-1
 2021-07-01 12:18:05 [ℹ]  will use version 1.20 for new nodegroup(s) based on control plane version

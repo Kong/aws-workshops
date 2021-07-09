@@ -20,7 +20,7 @@ kubectl delete namespace elk
 
 ## Uninstall Prometheus Operator
 <pre>
-kubectl delete kongclusterplugin prometheus-plugin
+kubectl delete kongclusterplugin prometheus
 kubectl delete service kong-dp-monitoring -n kong-dp
 kubectl delete servicemonitor kong-dp-service-monitor -n kong-dp
 kubectl delete serviceaccount kong-prometheus -n kong-dp
@@ -50,6 +50,8 @@ kubectl delete kongclusterplugin tcp-log
 
 helm uninstall kong -n kong
 helm uninstall kong-dp -n kong-dp
+
+kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
 kubectl delete namespaces kong kong-dp
 </pre>
