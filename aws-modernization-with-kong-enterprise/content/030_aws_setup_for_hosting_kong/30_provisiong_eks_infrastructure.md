@@ -11,7 +11,7 @@ Before getting started with the workshop, we recommend to have an EKS Cluster al
 We're going to use [eksctl](https://eksctl.io/) to create our EKS Cluster.
 
 <pre>
-$ eksctl create cluster --name K4K8S --version 1.20 --region eu-central-1 --without-nodegroup
+$ eksctl create cluster --name K4K8S --version 1.21 --region us-east-1 --without-nodegroup
 2021-07-01 11:24:07 [ℹ]  eksctl version 0.54.0
 2021-07-01 11:24:07 [ℹ]  using region eu-central-1
 2021-07-01 11:24:08 [ℹ]  setting availability zones to [eu-central-1c eu-central-1b eu-central-1a]
