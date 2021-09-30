@@ -1,7 +1,7 @@
 ---
 title: "Prometheus and Grafana"
 chapter: false
-weight: 61
+weight: 51
 ---
 
 ## Prometheus and Grafana
@@ -17,7 +17,7 @@ Since we have Prometheus and Grafana already deployed where going to consume the
 ### Fortio
 Use Fortio to start injecting some request to the Data Plane
 ````
-$ fortio load -c 120 -qps 2000 -t 0 http://a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com/sampleroute/hello
+$ fortio load -c 120 -qps 2000 -t 0 http://a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com/sampleroute/hello
 ````
 
 ### Check Grafana
@@ -48,17 +48,17 @@ kong-dp-kong   Deployment/kong-dp-kong   15%/75%   1         20        3        
 ### Consume the new Prometheus Service
 Get the API consumption rate
 ````
-$ curl -gs 'http://a6c91b4ef9c9543b285aea42c00fbbb2-2102856654.eu-central-1.elb.amazonaws.com:9090/api/v1/query?query=sum(rate(kong_http_status{code="200"}[1m]))' | jq -r .data.result[].value[1]
+$ curl -gs 'http://a81a086ab48e446d68c35d0bd0e93550-437150660.us-east-1.elb.amazonaws.com:9090/api/v1/query?query=sum(rate(kong_http_status{code="200"}[1m]))' | jq -r .data.result[].value[1]
 199.8
 ````
 
 Get the number of successful processed requests
 ````
-$ curl -gs 'http://a6c91b4ef9c9543b285aea42c00fbbb2-2102856654.eu-central-1.elb.amazonaws.com:9090/api/v1/query?query=kong_http_status{code="200"}' | jq -r .data.result[].value[1]
+$ curl -gs 'http://a81a086ab48e446d68c35d0bd0e93550-437150660.us-east-1.elb.amazonaws.com:9090/api/v1/query?query=kong_http_status{code="200"}' | jq -r .data.result[].value[1]
 669973
 ````
 
-Check the new Prometheus instance GUI redirecting your browser to http://a6c91b4ef9c9543b285aea42c00fbbb2-2102856654.eu-central-1.elb.amazonaws.com:9090
+Check the new Prometheus instance GUI redirecting your browser to http://a81a086ab48e446d68c35d0bd0e93550-437150660.us-east-1.elb.amazonaws.com:9090
 
 
 ![service_monitor2](/images/service_monitor2.png)
@@ -66,15 +66,18 @@ Check the new Prometheus instance GUI redirecting your browser to http://a6c91b4
 ````
 $ kubectl get hpa -n kong-dp
 NAME           REFERENCE                 TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-kong-dp-kong   Deployment/kong-dp-kong   40%/75%   1         20        4          17h
+kong-dp-kong   Deployment/kong-dp-kong   66%/75%   1         20        7          80m
 
 $ kubectl get pod -n kong-dp
 NAME                              READY   STATUS    RESTARTS   AGE
-kong-dp-kong-58f7b865fb-584km     1/1     Running   0          98s
-kong-dp-kong-58f7b865fb-btktv     1/1     Running   0          17h
-kong-dp-kong-58f7b865fb-s2bhh     1/1     Running   0          98s
-kong-dp-kong-58f7b865fb-t9n9p     1/1     Running   0          98s
-prometheus-kong-dp-prometheus-0   2/2     Running   1          13m
+kong-dp-kong-67995ddc8c-2t2gj     1/1     Running   0          2m44s
+kong-dp-kong-67995ddc8c-4vhph     1/1     Running   0          80m
+kong-dp-kong-67995ddc8c-4xjv2     1/1     Running   0          2m44s
+kong-dp-kong-67995ddc8c-7jsxl     1/1     Running   0          4m30s
+kong-dp-kong-67995ddc8c-8k44s     1/1     Running   0          3m44s
+kong-dp-kong-67995ddc8c-bpdvh     1/1     Running   0          2m44s
+kong-dp-kong-67995ddc8c-npnjf     1/1     Running   0          4m15s
+prometheus-kong-dp-prometheus-0   2/2     Running   0          67m
 ````
 
 ## Accessing Grafana
