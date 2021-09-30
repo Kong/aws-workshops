@@ -56,14 +56,14 @@ Check the Deployment
 ```
 $ kubectl get services
 NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-kubernetes   ClusterIP   10.100.0.1      <none>        443/TCP    19h
-sample       ClusterIP   10.100.80.154   <none>        5000/TCP   48s
+kubernetes   ClusterIP   10.100.0.1      <none>        443/TCP    16h
+sample       ClusterIP   10.100.200.96   <none>        5000/TCP   5s
 ```
 
 ```
 $ kubectl get pods
 NAME                      READY   STATUS    RESTARTS   AGE
-sample-76db6bb547-p85q9   1/1     Running   0          54s
+sample-76db6bb547-w5nkk   1/1     Running   0          20s
 ```
 
 Open a local terminal and expose the application with "port forward":
@@ -80,10 +80,10 @@ $ http :5000/hello
 HTTP/1.0 200 OK
 Content-Length: 45
 Content-Type: text/html; charset=utf-8
-Date: Thu, 08 Jul 2021 16:49:41 GMT
+Date: Thu, 30 Sep 2021 15:40:40 GMT
 Server: Werkzeug/1.0.1 Python/3.7.4
 
-Hello World, Kong: 2021-07-08 16:49:41.002500
+Hello World, Kong: 2021-09-30 15:40:40.739851
 ```
 
 Type ˆC on the first terminal to stop the application exposure.

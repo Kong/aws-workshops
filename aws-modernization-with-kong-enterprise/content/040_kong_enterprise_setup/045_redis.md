@@ -66,11 +66,11 @@ EOF
 <pre>
 $ kubectl get pod -n redis
 NAME                    READY   STATUS    RESTARTS   AGE
-redis-fd794cd65-t42r9   1/1     Running   0          8s
+redis-fd794cd65-dpkht   1/1     Running   0          6s
 </pre>
 
 <pre>
 $ kubectl get service -n redis
-NAME    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-redis   ClusterIP   10.100.195.86   <none>        6379/TCP   14s
+NAME    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+redis   ClusterIP   10.100.250.164   <none>        6379/TCP   17s
 </pre>

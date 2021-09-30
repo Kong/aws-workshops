@@ -40,26 +40,26 @@ helm install prometheus -n prometheus prometheus-community/kube-prometheus-stack
 Use should see several new Pods and Services after the installations
 ```
 $ kubectl get service -n prometheus
-NAME                                      TYPE           CLUSTER-IP       EXTERNAL-IP                                                                 PORT(S)                      AGE
-alertmanager-operated                     ClusterIP      None             <none>                                                                      9093/TCP,9094/TCP,9094/UDP   26m
-prometheus-grafana                        LoadBalancer   10.100.204.248   ae1ec0bd5f24349d29915b384b0e357f-301715715.eu-central-1.elb.amazonaws.com   80:31331/TCP                 27m
-prometheus-kube-prometheus-alertmanager   LoadBalancer   10.100.98.34     a8bc14bcf3eb34ce4bd6b1607be191f8-225304004.eu-central-1.elb.amazonaws.com   9093:31094/TCP               27m
-prometheus-kube-prometheus-operator       ClusterIP      10.100.0.147     <none>                                                                      443/TCP                      27m
-prometheus-kube-prometheus-prometheus     LoadBalancer   10.100.160.161   a49dce814ab2f40f3b34ae942e02bf4b-931182925.eu-central-1.elb.amazonaws.com   9090:30701/TCP               27m
-prometheus-kube-state-metrics             ClusterIP      10.100.23.71     <none>                                                                      8080/TCP                     27m
-prometheus-operated                       ClusterIP      None             <none>                                                                      9090/TCP                     26m
-prometheus-prometheus-node-exporter       ClusterIP      10.100.130.95    <none>                                                                      9100/TCP                     27m
+NAME                                      TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                      AGE
+alertmanager-operated                     ClusterIP      None             <none>                                                                    9093/TCP,9094/TCP,9094/UDP   55s
+prometheus-grafana                        LoadBalancer   10.100.47.13     a5f6d918221a14383813bc2f6b88c6c4-2050279250.us-east-1.elb.amazonaws.com   80:31877/TCP                 59s
+prometheus-kube-prometheus-alertmanager   LoadBalancer   10.100.18.20     acb89669ac9a1432b81c25d418832f84-579800983.us-east-1.elb.amazonaws.com    9093:32325/TCP               59s
+prometheus-kube-prometheus-operator       ClusterIP      10.100.118.126   <none>                                                                    443/TCP                      59s
+prometheus-kube-prometheus-prometheus     LoadBalancer   10.100.19.126    a9a5daa0ee24243dabd0d771f77df7c7-832896403.us-east-1.elb.amazonaws.com    9090:31784/TCP               59s
+prometheus-kube-state-metrics             ClusterIP      10.100.254.140   <none>                                                                    8080/TCP                     59s
+prometheus-operated                       ClusterIP      None             <none>                                                                    9090/TCP                     55s
+prometheus-prometheus-node-exporter       ClusterIP      10.100.8.65      <none>                                                                    9100/TCP                     59s
 ```
 
 ```
 $ kubectl get pod -n prometheus
 NAME                                                     READY   STATUS    RESTARTS   AGE
-alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   0          27m
-prometheus-grafana-7ff95c75bd-vkkzp                      2/2     Running   0          27m
-prometheus-kube-prometheus-operator-59c5dcf5bc-vwbpp     1/1     Running   0          27m
-prometheus-kube-state-metrics-84dfc44b69-nl5n9           1/1     Running   0          27m
-prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running   1          27m
-prometheus-prometheus-node-exporter-jtzts                1/1     Running   0          27m
+alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   0          86s
+prometheus-grafana-756d9b8485-769kp                      2/2     Running   0          89s
+prometheus-kube-prometheus-operator-686b89b849-4v25b     1/1     Running   0          90s
+prometheus-kube-state-metrics-58c5cd6ddb-mhjpt           1/1     Running   0          90s
+prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running   0          86s
+prometheus-prometheus-node-exporter-8qddg                1/1     Running   0          90s
 ```
 
 
@@ -70,10 +70,10 @@ prometheus-prometheus-node-exporter-jtzts                1/1     Running   0    
 Get the Prometheus' Load Balancer address
 <pre>
 $ kubectl get service prometheus-kube-prometheus-prometheus -n prometheus \-\-output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-a49dce814ab2f40f3b34ae942e02bf4b-931182925.eu-central-1.elb.amazonaws.com
+a9a5daa0ee24243dabd0d771f77df7c7-832896403.us-east-1.elb.amazonaws.com
 </pre>
 
-Redirect your browser to http://a49dce814ab2f40f3b34ae942e02bf4b-931182925.eu-central-1.elb.amazonaws.com:9090
+Redirect your browser to http://a9a5daa0ee24243dabd0d771f77df7c7-832896403.us-east-1.elb.amazonaws.com:9090
 
 ![prometheus](/images/prometheus.png)
 
@@ -83,7 +83,7 @@ Redirect your browser to http://a49dce814ab2f40f3b34ae942e02bf4b-931182925.eu-ce
 Do the same thing for Grafana
 <pre>
 $ kubectl get service prometheus-grafana -n prometheus \-\-output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-ae1ec0bd5f24349d29915b384b0e357f-301715715.eu-central-1.elb.amazonaws.com
+a5f6d918221a14383813bc2f6b88c6c4-2050279250.us-east-1.elb.amazonaws.com
 </pre>
 
 Get Grafana admin's password:
@@ -92,7 +92,7 @@ $ kubectl get secret prometheus-grafana -n prometheus -o jsonpath="{.data.admin-
 prom-operator
 </pre>
 
-Redirect your browser to it: http://ae1ec0bd5f24349d29915b384b0e357f-301715715.eu-central-1.elb.amazonaws.com. Use the <b>admin</b> id with the password we got.
+Redirect your browser to it: http://a5f6d918221a14383813bc2f6b88c6c4-2050279250.us-east-1.elb.amazonaws.com. Use the <b>admin</b> id with the password we got.
 
 ![grafana](/images/grafana.png)
 
@@ -164,17 +164,18 @@ Note that the new Kubernetes Service is selecting the existing Data Plane Kubern
 Use can check the label running:
 ```
 $ kubectl get service -n kong-dp -o wide
-NAME                 TYPE           CLUSTER-IP     EXTERNAL-IP                                                                  PORT(S)                      AGE   SELECTOR
-kong-dp-kong-proxy   LoadBalancer   10.100.12.30   a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP   53m   app.kubernetes.io/component=app,app.kubernetes.io/instance=kong-dp,app.kubernetes.io/name=kong
+NAME                 TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                      AGE   SELECTOR
+kong-dp-kong-proxy   LoadBalancer   10.100.56.103    a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com   80:31032/TCP,443:30651/TCP   38m   app.kubernetes.io/component=app,app.kubernetes.io/instance=kong-dp,app.kubernetes.io/name=kong
+kong-dp-monitoring   ClusterIP      10.100.170.163   <none>                                                                    8100/TCP                     6s    app.kubernetes.io/name=kong
 ```
 
 
 After submitting the declaration you should see the new Kubernetes Service:
 ```
 $ kubectl get service -n kong-dp
-NAME                 TYPE           CLUSTER-IP     EXTERNAL-IP                                                                  PORT(S)                      AGE
-kong-dp-kong-proxy   LoadBalancer   10.100.12.30   a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP   54m
-kong-dp-monitoring   ClusterIP      10.100.91.54   <none>                                                                       8100/TCP                     66s
+NAME                 TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                      AGE
+kong-dp-kong-proxy   LoadBalancer   10.100.56.103    a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com   80:31032/TCP,443:30651/TCP   38m
+kong-dp-monitoring   ClusterIP      10.100.170.163   <none>                                                                    8100/TCP                     34s
 ```
 
 
@@ -196,20 +197,28 @@ HTTP/1.1 200 OK
 Access-Control-Allow-Origin: *
 Connection: keep-alive
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 08 Jul 2021 16:38:26 GMT
-Server: kong/2.4.1.1-enterprise-edition
+Date: Thu, 30 Sep 2021 15:25:09 GMT
+Server: kong/2.5.1.0-enterprise-edition
 Transfer-Encoding: chunked
-X-Kong-Admin-Latency: 3
+X-Kong-Admin-Latency: 4
+X-Kong-Status-Request-ID: QNX72r2DlUxloZaqoWkMIBBU0Rvug2Jg
 
 # HELP kong_datastore_reachable Datastore reachable from Kong, 0 is unreachable
 # TYPE kong_datastore_reachable gauge
 kong_datastore_reachable 1
-# HELP kong_enterprise_license_errors Errors when collecting license info
-# TYPE kong_enterprise_license_errors counter
-kong_enterprise_license_errors 1
+# HELP kong_enterprise_license_expiration Unix epoch time when the license expires, the timestamp is substracted by 24 hours to avoid difference in timezone
+# TYPE kong_enterprise_license_expiration gauge
+kong_enterprise_license_expiration 1653998400
+# HELP kong_enterprise_license_features License features features
+# TYPE kong_enterprise_license_features gauge
+kong_enterprise_license_features{feature="ee_plugins"} 1
+kong_enterprise_license_features{feature="write_admin_api"} 1
+# HELP kong_enterprise_license_signature Last 32 bytes of the license signautre in number
+# TYPE kong_enterprise_license_signature gauge
+kong_enterprise_license_signature 3.5512300986528e+40
 # HELP kong_memory_lua_shared_dict_bytes Allocated slabs in bytes in a shared_dict
 # TYPE kong_memory_lua_shared_dict_bytes gauge
-kong_memory_lua_shared_dict_bytes{shared_dict="kong"} 40960
+kong_memory_lua_shared_dict_bytes{shared_dict="kong",kong_subsystem="http"} 40960
 ………….
 </pre>
 
@@ -319,16 +328,16 @@ Check the Installation
 ````
 $ kubectl get pod -n kong-dp
 NAME                              READY   STATUS    RESTARTS   AGE
-kong-dp-kong-67c5c7d4c5-n2cv6     1/1     Running   0          44m
-prometheus-kong-dp-prometheus-0   2/2     Running   1          3m39s
+kong-dp-kong-67995ddc8c-4vhph     1/1     Running   0          13m
+prometheus-kong-dp-prometheus-0   2/2     Running   0          43s
 ````
 
 ````
 $ kubectl get service -n kong-dp
-NAME                  TYPE           CLUSTER-IP     EXTERNAL-IP                                                                  PORT(S)                      AGE
-kong-dp-kong-proxy    LoadBalancer   10.100.12.30   a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP   61m
-kong-dp-monitoring    ClusterIP      10.100.91.54   <none>                                                                       8100/TCP                     7m50s
-prometheus-operated   ClusterIP      None           <none>                                                                       9090/TCP                     3m54s
+NAME                  TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                      AGE
+kong-dp-kong-proxy    LoadBalancer   10.100.56.103    a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com   80:31032/TCP,443:30651/TCP   44m
+kong-dp-monitoring    ClusterIP      10.100.170.163   <none>                                                                    8100/TCP                     6m38s
+prometheus-operated   ClusterIP      None             <none>                                                                    9090/TCP                     4m12s
 ````
 
 ````
@@ -346,9 +355,9 @@ service/prometheus-operated-lb exposed
 
 ````
 $ kubectl get service -n kong-dp
-NAME                     TYPE           CLUSTER-IP      EXTERNAL-IP                                                                  PORT(S)                      AGE
-kong-dp-kong-proxy       LoadBalancer   10.100.12.30    a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP   78m
-kong-dp-monitoring       ClusterIP      10.100.91.54    <none>                                                                       8100/TCP                     24m
-prometheus-operated      ClusterIP      None            <none>                                                                       9090/TCP                     20m
-prometheus-operated-lb   LoadBalancer   10.100.81.131   a6c91b4ef9c9543b285aea42c00fbbb2-2102856654.eu-central-1.elb.amazonaws.com   9090:31259/TCP               4s
+NAME                     TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                      AGE
+kong-dp-kong-proxy       LoadBalancer   10.100.56.103    a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com   80:31032/TCP,443:30651/TCP   45m
+kong-dp-monitoring       ClusterIP      10.100.170.163   <none>                                                                    8100/TCP                     7m20s
+prometheus-operated      ClusterIP      None             <none>                                                                    9090/TCP                     4m54s
+prometheus-operated-lb   LoadBalancer   10.100.77.90     a81a086ab48e446d68c35d0bd0e93550-437150660.us-east-1.elb.amazonaws.com    9090:31798/TCP               14s
 ````
