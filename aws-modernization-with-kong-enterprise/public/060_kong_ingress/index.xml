@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kong Ingress Controller Policies on Self-Paced</title>
+    <link>/060_kong_ingress.html</link>
+    <description>Recent content in Kong Ingress Controller Policies on Self-Paced</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/060_kong_ingress/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Proxy Caching</title>
+      <link>/060_kong_ingress/061_cache.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/060_kong_ingress/061_cache.html</guid>
+      <description>Proxy Caching Policy Definition Since we have the Microservice exposed through a route defined in the Ingress Controller, let&amp;rsquo;s apply the Proxy Caching plugin to cache the data coming from it.
+Create the plugin
+cat &amp;lt;&amp;lt;EOF | kubectl apply -f - apiVersion: configuration.konghq.com/v1 kind: KongPlugin metadata: name: proxycache namespace: default config: cache_ttl: 30 strategy: memory content_type: [&amp;#34;text/html; charset=utf-8&amp;#34;] plugin: proxy-cache EOF If you want to delete it run:
+$ kubectl delete kongplugin proxycache Apply the plugin to the route</description>
+    </item>
+    
+    <item>
+      <title>Rate Limiting Policy Definition</title>
+      <link>/060_kong_ingress/063_rate_limiting.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/060_kong_ingress/063_rate_limiting.html</guid>
+      <description>Rate Limiting Policy Definition Now let&amp;rsquo;s protect our upstream service with a Rate Limiting policy.
+Create the plugin
+cat &amp;lt;&amp;lt;EOF | kubectl apply -f - apiVersion: configuration.konghq.com/v1 kind: KongPlugin metadata: name: rl-by-minute namespace: default config: minute: 3 policy: local plugin: rate-limiting EOF If you want to delete it run:
+$ kubectl delete kongplugin rl-by-minute Apply the plugin to the route
+kubectl patch ingress sampleroute -p &amp;#39;{&amp;#34;metadata&amp;#34;:{&amp;#34;annotations&amp;#34;:{&amp;#34;konghq.com/plugins&amp;#34;:&amp;#34;proxycache, rl-by-minute&amp;#34;}}}&amp;#39; In case you want to disapply the plugin to the ingress run:</description>
+    </item>
+    
+    <item>
+      <title>API Key Policy Definition</title>
+      <link>/060_kong_ingress/064_api_key.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/060_kong_ingress/064_api_key.html</guid>
+      <description>API Key Policy Definition Now, let&amp;rsquo;s add an API Key Policy to this route:
+Create the plugin
+cat &amp;lt;&amp;lt;EOF | kubectl apply -f - apiVersion: configuration.konghq.com/v1 kind: KongPlugin metadata: name: apikey namespace: default plugin: key-auth EOF If you want to delete it run:
+$ kubectl delete kongplugin apikey Now, let&amp;rsquo;s add an API Key Policy to this route keeping the original Rate Limiting plugin:
+kubectl patch ingress sampleroute -p &amp;#39;{&amp;#34;metadata&amp;#34;:{&amp;#34;annotations&amp;#34;:{&amp;#34;konghq.</description>
+    </item>
+    
+    <item>
+      <title>Set up Ingress rule for Kong Ingress</title>
+      <link>/060_kong_ingress/065_ingress_rule.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/060_kong_ingress/065_ingress_rule.html</guid>
+      <description>Set up Ingress rule for Kong Ingress In this learning lab, you will learn how to use the KongIngress resource to control proxy behavior.
+Deploy the new Service cat &amp;lt;&amp;lt;EOF | kubectl apply -f - apiVersion: v1 kind: Service metadata: labels: app: echo name: echo spec: ports: - port: 8080 name: high protocol: TCP targetPort: 8080 - port: 80 name: low protocol: TCP targetPort: 8080 selector: app: echo --- apiVersion: apps/v1 kind: Deployment metadata: labels: app: echo name: echo spec: replicas: 1 selector: matchLabels: app: echo strategy: {} template: metadata: creationTimestamp: null labels: app: echo spec: containers: - image: gcr.</description>
+    </item>
+    
+    <item>
+      <title>Configuring a fallback service</title>
+      <link>/060_kong_ingress/066_fallback_service.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/060_kong_ingress/066_fallback_service.html</guid>
+      <description>Configuring a fallback service In this learning lab, you will learn how to setup a fallback service using Ingress resource. The fallback service will receive all requests that don&amp;rsquo;t match against any of the defined Ingress rules.
+This can be useful for scenarios where you would like to return a 404 page to the end user if the user clicks on a dead link or inputs an incorrect URL.</description>
+    </item>
+    
+    <item>
+      <title>HTTP/S Redirect</title>
+      <link>/060_kong_ingress/067_https_redirect.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/060_kong_ingress/067_https_redirect.html</guid>
+      <description>HTTP/S Redirect This guide walks through how to configure Kong Ingress Controller to redirect HTTP request to HTTPS so that all communication from the external world to your APIs and micro services is encrypted.
+Create the Ingress We&amp;rsquo;re going to create an Ingress for the Echo Service we deployed previously
+cat &amp;lt;&amp;lt;EOF | kubectl apply -f - apiVersion: extensions/v1beta1 kind: Ingress metadata: name: demo-redirect annotations: konghq.com/strip-path: &amp;#34;true&amp;#34; kubernetes.io/ingress.class: kong spec: rules: - http: paths: - path: /foo-redirect backend: serviceName: echo servicePort: 80 EOF Consume the Ingress $ http a6bf3f71a14a64dba850480616af8fc9-1188819016.</description>
+    </item>
+    
+    <item>
+      <title>Redis for Rate Limiting</title>
+      <link>/060_kong_ingress/068_redis_ratelimiting.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/060_kong_ingress/068_redis_ratelimiting.html</guid>
+      <description>Redis for Rate Limiting Kong can rate-limit your traffic without any external dependency. In such a case, Kong stores the request counters in-memory and each Kong node applies the rate-limiting policy independently. There is no synchronization of information being done in this case. But if Redis is available in your cluster, Kong can take advantage of it and synchronize the rate-limit information across multiple Kong nodes and enforce a slightly different rate-limiting policy.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -2,14 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/ee/020_event_engine_setup.html</loc>
-  </url><url>
-    <loc>/ee/020_event_engine_setup/20_aws_event_engine.html</loc>
-  </url><url>
-    <loc>/ee/020_event_engine_setup/22_start_cloud9workspace.html</loc>
-  </url><url>
-    <loc>/ee/020_event_engine_setup/24_attach_iam_role.html</loc>
-  </url><url>
     <loc>/ee/categories.html</loc>
     <xhtml:link
                 rel="alternate"

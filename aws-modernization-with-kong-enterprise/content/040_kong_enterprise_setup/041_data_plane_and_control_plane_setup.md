@@ -242,7 +242,7 @@ a9ed78cc5bb954931aec1b5bf48298f6-2098365612.us-east-1.elb.amazonaws.com
 
 <pre>
 $ http a9ed78cc5bb954931aec1b5bf48298f6-2098365612.us-east-1.elb.amazonaws.com:8001 | jq -r .version
-2.5.1.0-enterprise-edition"
+2.5.1.0-enterprise-edition
 </pre>
 
 

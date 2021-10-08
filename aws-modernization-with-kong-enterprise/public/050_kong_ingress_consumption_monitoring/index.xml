@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kong Ingress Consumption and Monitoring on Self-Paced</title>
+    <link>/050_kong_ingress_consumption_monitoring.html</link>
+    <description>Recent content in Kong Ingress Consumption and Monitoring on Self-Paced</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/050_kong_ingress_consumption_monitoring/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Prometheus and Grafana</title>
+      <link>/050_kong_ingress_consumption_monitoring/051_prometheus_grafana.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/050_kong_ingress_consumption_monitoring/051_prometheus_grafana.html</guid>
+      <description>Prometheus and Grafana Since we have Prometheus and Grafana already deployed where going to consume the Data Plane and monitor it from two perspectives:
+ Kubernetes monitoring: monitor the Kong Data Plane Deployment in terms of resource consumption (CPU, memory and networking) Kong Data Plane monitoring: monitor the Kong Data Plane in terms of API consumption including number of processed requests, latency times, etc.  Kubernetes Monitoring and HPA Fortio Use Fortio to start injecting some request to the Data Plane</description>
+    </item>
+    
+    <item>
+      <title>ELK</title>
+      <link>/050_kong_ingress_consumption_monitoring/052_elk.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/050_kong_ingress_consumption_monitoring/052_elk.html</guid>
+      <description>ELK Stack Now let&amp;rsquo;s use ELK Stack to receive and work with all requests coming from the Kong Data Planes
+Create an ELK Index $ kubectl get service kibana-kibana --output=jsonpath=&amp;#39;{.status.loadBalancer.ingress[0].hostname}&amp;#39; -n elk a39e2c2d48c044a67bc5f45e22c67b09-669447722.us-east-1.elb.amazonaws.com Redirect your browser to the Load Balancer instantiated for it: http://a39e2c2d48c044a67bc5f45e22c67b09-669447722.us-east-1.elb.amazonaws.com:5601
+Click on Explore on my own On the left menu click on Management -&amp;gt; Stack Management
+Click on Data -&amp;gt; Index Management. Since we&amp;rsquo;re already send requests to the Data Plane and we have enabled the TCP-Log plugin, we should see the kong index as we set in our Logstash configuration.</description>
+    </item>
+    
+  </channel>
+</rss>

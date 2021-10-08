@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kong and AWS Cognito on Self-Paced</title>
+    <link>/070_kong_cognito.html</link>
+    <description>Recent content in Kong and AWS Cognito on Self-Paced</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/070_kong_cognito/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AWS Cognito</title>
+      <link>/070_kong_cognito/071_cognito.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/070_kong_cognito/071_cognito.html</guid>
+      <description>Creating AWS Cognito First of all, let&amp;rsquo;s create a Cognito instance using the AWS Console
+ Go to Cognito console and click on &amp;ldquo;Managed User Pools&amp;rdquo; and on &amp;ldquo;Create a user pool&amp;rdquo;. Name your pool as &amp;ldquo;kongpool&amp;rdquo; and click on &amp;ldquo;Step through settings&amp;rdquo;. Select “Email address or phone number” and, under that, select “Allow email addresses”. Select the following standard attributes as required  email family name given name  Click on &amp;ldquo;Next step&amp;rdquo;.</description>
+    </item>
+    
+    <item>
+      <title>OpenId Connect Plugin</title>
+      <link>/070_kong_cognito/073_oidc_plugin.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/070_kong_cognito/073_oidc_plugin.html</guid>
+      <description>Instantiating an OIDC plugin cat &amp;lt;&amp;lt;EOF | kubectl apply -f - apiVersion: configuration.konghq.com/v1 kind: KongPlugin metadata: name: oidc namespace: default config: client_id: [2bstc80hrpbppslrev646e1g6e] client_secret: [hqg1pr8s1khm4thi7n4efk6tdblhr2f4cpre51ct4tvlgbglvql] issuer: &amp;#34;https://cognito-idp.us-east-1.amazonaws.com/us-east-1_XZkYwawRq/.well-known/openid-configuration&amp;#34; cache_ttl: 10 redirect_uri: [&amp;#34;https://a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com/sampleroute/hello&amp;#34;] plugin: openid-connect EOF Observations:
+ The issuer URL follows the format: https://cognito-idp.{region}.amazonaws.com/{userPoolId} OIDC plugin generates, by default the &amp;ldquo;redirect uri&amp;rdquo; based on its port (8443). The &amp;ldquo;redirect_uri&amp;rdquo; parameter defines the URI to be used to redirect the user after getting authenticated.</description>
+    </item>
+    
+  </channel>
+</rss>
