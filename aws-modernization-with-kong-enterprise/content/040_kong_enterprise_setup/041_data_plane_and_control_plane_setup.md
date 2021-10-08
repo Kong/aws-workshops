@@ -65,7 +65,7 @@ kubectl create namespace kong
 
 ### Create a Kubernetes secret with the pair
 <pre>
-kubectl create secret tls kong-cluster-cert \-\-cert=./cluster.crt \-\-key=./cluster.key -n kong
+kubectl create secret tls kong-cluster-cert --cert=./cluster.crt --key=./cluster.key -n kong
 </pre>
 
 ### Create a secret with your license file
@@ -91,6 +91,7 @@ kubectl create secret generic kong-session-config -n kong --from-file=admin_gui_
 
 
 ### Deploy the Control Plane
+<pre>
 helm install kong kong/kong -n kong \
 --set env.database=postgres \
 --set env.role=control_plane \
@@ -134,7 +135,7 @@ helm install kong kong/kong -n kong \
 --set portalapi.http.enabled=true \
 --set portalapi.type=LoadBalancer \
 --set secretVolumes[0]=kong-cluster-cert
-
+</pre>
 
 Control Plane uses port 8005 to publish any new API configuration it has. On the other hand, Data Plane uses the port 8006 to report back all metrics regarding API Consumption.
 
@@ -148,7 +149,7 @@ kubectl create namespace kong-dp
 
 Create the secret for the Data Plane using the same Digital Certicate and Private Key pair:
 <pre>
-kubectl create secret tls kong-cluster-cert \-\-cert=./cluster.crt \-\-key=./cluster.key -n kong-dp
+kubectl create secret tls kong-cluster-cert --cert=./cluster.crt --key=./cluster.key -n kong-dp
 </pre>
 
 Create a secret with your license file
@@ -351,5 +352,12 @@ If you redirect your browser to http://abd76df53f5584e8f800a9f9ac73d5fa-21140374
 
 
 ### Go to Kong Developer Portal
-Login to Kong Manager using the specific ELB:
+Click on the <b>Dev Portals</b> menu option.
+
+![kong_devportals](/images/devportals.png)
+
+
+ Click on the ELB link available
+![kong_devportal](/images/devportal.png)
+
 
