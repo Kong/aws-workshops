@@ -4,28 +4,18 @@ chapter: false
 weight: 70
 ---
 
-## Kong Ingress Controller Policies
+## Kong OpenId Connect plugin and AWS Cognito
 
-Since we have an sample application deployed and an Ingress exposing it, it's time to control such exposure.
+For Enterprise class applications it's highly recommended to externalize the Authentication processes to a specific component called Identity Provider (IdP)
 
-To get started, we're going to use three fundamental plugins provided by Kong:
+From this perspectivie, IdP are typically responsible for several capabilities:
 
-* Proxy Caching plugin: it caches and serves commonly requested responses in Kong
-
-* Rate Limiting plugin: it limits how many HTTP requests can be made in a given period of seconds, minutes, hours, days, months, or years. We're going to define a basic 3-request a minute policy
-
-* Key Authentication plugin: also sometimes referred to as an API key, controls the consumers sending requests to the Gateway.
-
-Feel free to change the policies used and experiment further implementing policies like caching OIDC-based authentication, canary, GraphQL integration, and more with the extensive list of plugins provided by Kong. Check the list over here: https://docs.konghq.com/hub/
+* User and Application Authentication
+* Tokenization
+* Multi-factor Authentication
+* Credential databases abstraction
 
 
-Then we're going to apply other policies to our previously created Ingress
+The integration between the API Gateway and Identity Provider is implemented with the OpenId Connect standard. You can learn more about it here: https://openid.net/connect/
 
-* Set up Ingress rule for Kong Ingress
-
-* Configuring a fallback service
-
-* Configuring HTTPS redirect for services
-
-* Using Redis for rate-limiting
-
+This section explores such integration with Kong Enterprise through OIDC plugin and AWS Cognito implementing a basic OIDC Authorization Code Grant.
