@@ -1,33 +1,5 @@
 [
 {
-	"uri": "/ee/020_event_engine_setup.html",
-	"title": "Event Engine Setup",
-	"tags": [],
-	"description": "",
-	"content": " Event Engine Welcome to the Event Engine Setup section! This means that you are attending an AWS Hosted Workshop!! If you are not attending a workshop, please go to the self guided setup section. Event Engine is a tool created at AWS that provisions AWS accounts for workshop events like this! These accounts will automatically terminate 24 hours after the workshop begins participants don\u0026rsquo;t have to worry about leaving anything on. Each workshop participant will receive their own Event Engine AWS account.\nHere is a preview of what we will be setting up:\n Creating a Cloud9 IDE Workspace Attaching an EKS role to the Cloud9 instance Installing kubectl + other config updates on your Cloud9 instance  The next page will show you how to gain access to your Event Engine dashboard!\n"
-},
-{
-	"uri": "/ee/020_event_engine_setup/20_aws_event_engine.html",
-	"title": "1. AWS Event Engine",
-	"tags": [],
-	"description": "",
-	"content": " Attending an AWS hosted event To complete this workshop, you will be provided with an AWS account via the AWS Event Engine service. A team hash will be provided to you by event staff.\nIf you are currently logged in to an AWS Account, you can log out using this link\n Logging into Event Engine Dashboard  Connect to the portal by clicking the button or browsing to https://dashboard.eventengine.run/. The following screen shows up. Enter the provided hash in the text box. The button in the bottom right corner changes to Accept Terms \u0026amp; Login. Click on that button to continue.   Choose AWS Console, then Open AWS Console.   Use a single region for the duration of this workshop. This workshop supports the following regions:   us-east-1 (US East - N.Virginia)  Please select US East (N.Virginia) in the top right corner.\nThis account will expire at the end of the workshop and all the resources created will be automatically de-provisioned. You will not be able to access this account after today.\n "
-},
-{
-	"uri": "/ee/020_event_engine_setup/22_start_cloud9workspace.html",
-	"title": "2. Create a Workspace",
-	"tags": [],
-	"description": "",
-	"content": " Set up the Workspace AWS Cloud9 is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser. It includes a code editor, debugger, and terminal. Cloud9 comes prepackaged with essential tools for popular programming languages, including JavaScript, Python, PHP, and more, so you don’t need to install files or configure your laptop for this workshop.\nWe will use Amazon Cloud9 to access our AWS accounts via the AWS CLI in this Workshop. There are a few steps to complete to set this up\n Create a new Cloud9 IDE environment Create an IAM role for your workspace Attach the IAM role to your workspace Configure workshop specific requirements  Create a new Cloud9 IDE environment  Within the AWS console, use the region drop list to select us-east-1 (N. Virginia). This will ensure the workshop script provisions the resources in this same region..\n Navigate to the Cloud9 console or just search for it under the AWS console services menu.\n Click the Create environment button\n For the name use kong-workshop, then click Next step\n Select the default instance type t3.micro\n Leave all the other settings as default and click Next step followed by Create environment\n  This will take about 1-2 minutes to provision\n Configure Cloud9 IDE environment When the environment comes up, customize the environment by:\n Close the welcome page tab\n Close the lower work area tab\n Open a new terminal tab in the main work area.\n  If you don\u0026rsquo;t like this dark theme, you can change it from the View / Themes Cloud9 workspace menu.\n Cloud9 requires third-party-cookies. You can whitelist the specific domains. You are having issues with this, Ad blockers, javascript disablers, and tracking blockers should be disabled for the cloud9 domain, or connecting to the workspace might be impacted.\n "
-},
-{
-	"uri": "/ee/020_event_engine_setup/24_attach_iam_role.html",
-	"title": "3. Attach IAM Role",
-	"tags": [],
-	"description": "",
-	"content": " Attach the IAM role to your instance Will need\n Follow this deep link to find your Cloud9 EC2 instance\n Select the instance, then choose Actions / Security / Modify IAM role\n Choose the role that contains your Partner Name in it.\n Click Save\n  "
-},
-{
 	"uri": "/ee/categories.html",
 	"title": "Categories",
 	"tags": [],

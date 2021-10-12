@@ -32,7 +32,7 @@ openssl req -new -x509 -nodes -newkey ec:<(openssl ecparam -name secp384r1) \
 Before installing the Control Plane make sure you have Helm installed locally:
 <pre>
 $ helm version
-version.BuildInfo{Version:"v3.6.0", GitCommit:"7f2df6467771a75f5646b7f12afb408590ed1755", GitTreeState:"dirty", GoVersion:"go1.16.4"}
+version.BuildInfo{Version:"v3.7.0", GitCommit:"eeac83883cb4014fe60267ec6373570374ce770b", GitTreeState:"clean", GoVersion:"go1.17"}
 </pre>
 
 Now add Kong Helm Charts repo:
@@ -63,22 +63,36 @@ Let's get started deploying the Kong Konnect Control Plane. First of all, create
 kubectl create namespace kong
 </pre>
 
-Create a Kubernetes secret with the pair
+### Create a Kubernetes secret with the pair
 <pre>
-kubectl create secret tls kong-cluster-cert \-\-cert=./cluster.crt \-\-key=./cluster.key -n kong
+kubectl create secret tls kong-cluster-cert --cert=./cluster.crt --key=./cluster.key -n kong
+</pre>
+
+### Create a secret with your license file
+<pre>
+kubectl create secret generic kong-enterprise-license -n kong --from-file=./license
+</pre>
+
+### Create a <b>"admin_gui.session_conf"</b> file for Kong Manager session conf.
+<pre>
+{"cookie_name":"admin_session","cookie_samesite":"off","secret":"kong","cookie_secure":false,"storage":"kong"}
+</pre>
+
+### Create a <b>"portal_session_conf"</b> file for for Kong DevPortal session conf
+<pre>
+{"cookie_name":"portal_session","cookie_samesite":"off","secret":"kong","cookie_secure":false,"storage":"kong"}
 </pre>
 
 
-Install the Control Plane
+Create the session conf with kubectl
+<pre>
+kubectl create secret generic kong-session-config -n kong --from-file=admin_gui_session_conf --from-file=portal_session_conf
+</pre>
 
+
+### Deploy the Control Plane
 <pre>
 helm install kong kong/kong -n kong \
---set ingressController.enabled=true \
---set ingressController.installCRDs=false \
---set ingressController.image.repository=kong/kubernetes-ingress-controller \
---set ingressController.image.tag=1.3.1-alpine \
---set image.repository=kong/kong-gateway \
---set image.tag=2.4.1.1-alpine \
 --set env.database=postgres \
 --set env.role=control_plane \
 --set env.cluster_cert=/etc/secrets/kong-cluster-cert/tls.crt \
@@ -91,24 +105,41 @@ helm install kong kong/kong -n kong \
 --set clustertelemetry.tls.enabled=true \
 --set clustertelemetry.tls.servicePort=8006 \
 --set clustertelemetry.tls.containerPort=8006 \
---set proxy.enabled=true \
+--set image.repository=kong/kong-gateway \
+--set image.tag=2.5.1.0-alpine \
 --set admin.enabled=true \
 --set admin.http.enabled=true \
 --set admin.type=LoadBalancer \
---set enterprise.enabled=true \
---set enterprise.portal.enabled=false \
---set enterprise.rbac.enabled=false \
---set enterprise.smtp.enabled=false \
---set manager.enabled=true \
---set manager.type=LoadBalancer \
---set secretVolumes[0]=kong-cluster-cert \
+--set proxy.enabled=true \
+--set proxy.type=ClusterIP \
+--set ingressController.enabled=true \
+--set ingressController.installCRDs=false \
+--set ingressController.image.repository=kong/kubernetes-ingress-controller \
+--set ingressController.image.tag=1.3.2-alpine \
 --set postgresql.enabled=true \
 --set postgresql.postgresqlUsername=kong \
 --set postgresql.postgresqlDatabase=kong \
---set postgresql.postgresqlPassword=kong
+--set postgresql.postgresqlPassword=kong \
+--set enterprise.enabled=true \
+--set enterprise.license_secret=kong-enterprise-license \
+--set enterprise.rbac.enabled=false \
+--set enterprise.smtp.enabled=false \
+--set enterprise.portal.enabled=true \
+--set manager.enabled=true \
+--set manager.type=LoadBalancer \
+--set portal.enabled=true \
+--set portal.http.enabled=true \
+--set env.portal_gui_protocol=http \
+--set portal.type=LoadBalancer \
+--set portalapi.enabled=true \
+--set portalapi.http.enabled=true \
+--set portalapi.type=LoadBalancer \
+--set secretVolumes[0]=kong-cluster-cert
 </pre>
 
 Control Plane uses port 8005 to publish any new API configuration it has. On the other hand, Data Plane uses the port 8006 to report back all metrics regarding API Consumption.
+
+
 
 ## Data Plane
 Create another Kubernetes namespace specifically for the Data Plane:
@@ -118,8 +149,15 @@ kubectl create namespace kong-dp
 
 Create the secret for the Data Plane using the same Digital Certicate and Private Key pair:
 <pre>
-kubectl create secret tls kong-cluster-cert \-\-cert=./cluster.crt \-\-key=./cluster.key -n kong-dp
+kubectl create secret tls kong-cluster-cert --cert=./cluster.crt --key=./cluster.key -n kong-dp
 </pre>
+
+Create a secret with your license file
+<pre>
+kubectl create secret generic kong-enterprise-license -n kong-dp --from-file=./license
+</pre>
+
+
 
 Install the Data Plane
 
@@ -127,7 +165,7 @@ Install the Data Plane
 helm install kong-dp kong/kong -n kong-dp \
 --set ingressController.enabled=false \
 --set image.repository=kong/kong-gateway \
---set image.tag=2.4.1.1-alpine \
+--set image.tag=2.5.1.0-alpine \
 --set env.database=off \
 --set env.role=data_plane \
 --set env.cluster_cert=/etc/secrets/kong-cluster-cert/tls.crt \
@@ -138,6 +176,7 @@ helm install kong-dp kong/kong -n kong-dp \
 --set proxy.enabled=true \
 --set proxy.type=LoadBalancer \
 --set enterprise.enabled=true \
+--set enterprise.license_secret=kong-enterprise-license \
 --set enterprise.portal.enabled=false \
 --set enterprise.rbac.enabled=false \
 --set enterprise.smtp.enabled=false \
@@ -155,41 +194,43 @@ Note we're using the Control Plane's Kubernetes FQDN to get the Data Plane conne
 <pre>
 $ kubectl get deployment --all-namespaces
 NAMESPACE     NAME           READY   UP-TO-DATE   AVAILABLE   AGE
-default       sample         1/1     1            1           107m
-kong-dp       kong-dp-kong   1/1     1            1           30s
-kong          kong-kong      1/1     1            1           80s
-kube-system   coredns        2/2     2            2           3h40m
+kong-dp       kong-dp-kong   1/1     1            1           2m15s
+kong          kong-kong      1/1     1            1           20m
+kube-system   coredns        2/2     2            2           15h
 </pre>
 
 <pre>
 $ kubectl get pod --all-namespaces
 NAMESPACE     NAME                              READY   STATUS      RESTARTS   AGE
-kong-dp       kong-dp-kong-75478bfcff-sq8f6     1/1     Running     0          37s
-kong          kong-kong-5c5cbf7d54-xvszn        2/2     Running     0          101s
-kong          kong-kong-init-migrations-plkmh   0/1     Completed   0          101s
-kong          kong-postgresql-0                 1/1     Running     0          101s
-kube-system   aws-node-kjz2s                    1/1     Running     0          18h
-kube-system   coredns-85cc4f6d5-868x9           1/1     Running     0          18h
-kube-system   coredns-85cc4f6d5-jjcjq           1/1     Running     0          18h
-kube-system   kube-proxy-6gwdp                  1/1     Running     0          18h
+kong-dp       kong-dp-kong-848f4984dc-zshwv     1/1     Running     0          11m
+kong          kong-kong-777b5f56bc-76k5v        2/2     Running     0          19m
+kong          kong-kong-init-migrations-fwmg7   0/1     Completed   0          29m
+kong          kong-postgresql-0                 1/1     Running     0          29m
+kube-system   aws-node-kr2c4                    1/1     Running     0          15h
+kube-system   coredns-66cb55d4f4-8pwrn          1/1     Running     0          15h
+kube-system   coredns-66cb55d4f4-hw4mq          1/1     Running     0          15h
+kube-system   kube-proxy-gb8bc                  1/1     Running     0          15h
 </pre>
 
 <pre>
 $ kubectl get service --all-namespaces
-NAMESPACE     NAME                         TYPE           CLUSTER-IP       EXTERNAL-IP                                                                  PORT(S)                         AGE
-default       kubernetes                   ClusterIP      10.100.0.1       <none>                                                                       443/TCP                         18h
-kong-dp       kong-dp-kong-proxy           LoadBalancer   10.100.12.30     a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com   80:32336/TCP,443:31316/TCP      102s
-kong          kong-kong-admin              LoadBalancer   10.100.2.114     aeaea72cf7352414ba4ec598c8200f4a-1395366732.eu-central-1.elb.amazonaws.com   8001:32210/TCP,8444:32224/TCP   2m46s
-kong          kong-kong-cluster            ClusterIP      10.100.85.183    <none>                                                                       8005/TCP                        2m46s
-kong          kong-kong-clustertelemetry   ClusterIP      10.100.155.125   <none>                                                                       8006/TCP                        2m46s
-kong          kong-kong-manager            LoadBalancer   10.100.151.102   a9be7d6800a0c4f40b9cfac10c0fd65a-1065253554.eu-central-1.elb.amazonaws.com   8002:30167/TCP,8445:31107/TCP   2m46s
-kong          kong-kong-portal             NodePort       10.100.22.46     <none>                                                                       8003:30668/TCP,8446:32649/TCP   2m46s
-kong          kong-kong-portalapi          NodePort       10.100.175.163   <none>                                                                       8004:32170/TCP,8447:30569/TCP   2m46s
-kong          kong-kong-proxy              LoadBalancer   10.100.36.75     a498d1c494e0949969c0db90b597f609-240139526.eu-central-1.elb.amazonaws.com    80:32441/TCP,443:32727/TCP      2m46s
-kong          kong-postgresql              ClusterIP      10.100.70.30     <none>                                                                       5432/TCP                        2m46s
-kong          kong-postgresql-headless     ClusterIP      None             <none>                                                                       5432/TCP                        2m46s
-kube-system   kube-dns                     ClusterIP      10.100.0.10      <none>                                                                       53/UDP,53/TCP                   18h
+NAMESPACE     NAME                         TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                         AGE
+default       kubernetes                   ClusterIP      10.100.0.1       <none>                                                                    443/TCP                         15h
+kong-dp       kong-dp-kong-proxy           LoadBalancer   10.100.56.103    a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com   80:31032/TCP,443:30651/TCP      11m
+kong          kong-kong-admin              LoadBalancer   10.100.124.36    a9ed78cc5bb954931aec1b5bf48298f6-2098365612.us-east-1.elb.amazonaws.com   8001:32155/TCP,8444:32134/TCP   29m
+kong          kong-kong-cluster            ClusterIP      10.100.105.110   <none>                                                                    8005/TCP                        29m
+kong          kong-kong-clustertelemetry   ClusterIP      10.100.192.124   <none>                                                                    8006/TCP                        29m
+kong          kong-kong-manager            LoadBalancer   10.100.212.94    abd76df53f5584e8f800a9f9ac73d5fa-21140374.us-east-1.elb.amazonaws.com     8002:30693/TCP,8445:30219/TCP   29m
+kong          kong-kong-portal             LoadBalancer   10.100.135.213   a4d6e108295f5458e9cffa00856c1fb2-1667372698.us-east-1.elb.amazonaws.com   8003:30474/TCP,8446:32207/TCP   29m
+kong          kong-kong-portalapi          LoadBalancer   10.100.153.195   a0e9f107ba17749e5ac1542792a049f2-1349476423.us-east-1.elb.amazonaws.com   8004:31298/TCP,8447:30469/TCP   29m
+kong          kong-kong-proxy              ClusterIP      10.100.205.134   <none>                                                                    80/TCP,443/TCP                  29m
+kong          kong-postgresql              ClusterIP      10.100.10.254    <none>                                                                    5432/TCP                        29m
+kong          kong-postgresql-headless     ClusterIP      None             <none>                                                                    5432/TCP                        29m
+kube-system   kube-dns                     ClusterIP      10.100.0.10      <none>                                                                    53/UDP,53/TCP                   15h
 </pre>
+
+
+
 
 
 
@@ -197,37 +238,38 @@ kube-system   kube-dns                     ClusterIP      10.100.0.10      <none
 Use the Load Balancer created during the deployment
 <pre>
 $ kubectl get service kong-kong-admin \-\-output=jsonpath='{.status.loadBalancer.ingress[0].hostname}' -n kong
-aeaea72cf7352414ba4ec598c8200f4a-1395366732.eu-central-1.elb.amazonaws.com
+a9ed78cc5bb954931aec1b5bf48298f6-2098365612.us-east-1.elb.amazonaws.com
 </pre>
 
 <pre>
-$ http aeaea72cf7352414ba4ec598c8200f4a-1395366732.eu-central-1.elb.amazonaws.com:8001 | jq .version
-"2.4.1.1-enterprise-edition"
+$ http a9ed78cc5bb954931aec1b5bf48298f6-2098365612.us-east-1.elb.amazonaws.com:8001 | jq -r .version
+2.5.1.0-enterprise-edition
 </pre>
 
 
 ## Checking the Data Plane from the Control Plane
 
 <pre>
-$ http aeaea72cf7352414ba4ec598c8200f4a-1395366732.eu-central-1.elb.amazonaws.com:8001/clustering/status
+$ http a9ed78cc5bb954931aec1b5bf48298f6-2098365612.us-east-1.elb.amazonaws.com:8001/clustering/status
 HTTP/1.1 200 OK
-Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Origin: http://abd76df53f5584e8f800a9f9ac73d5fa-21140374.us-east-1.elb.amazonaws.com:8002
 Connection: keep-alive
-Content-Length: 179
+Content-Length: 177
 Content-Type: application/json; charset=utf-8
-Date: Thu, 08 Jul 2021 15:45:38 GMT
+Date: Thu, 30 Sep 2021 14:59:49 GMT
 Deprecation: true
-Server: kong/2.4.1.1-enterprise-edition
+Server: kong/2.5.1.0-enterprise-edition
 X-Kong-Admin-Latency: 3
-X-Kong-Admin-Request-ID: rfGHCRf37yxTWX1c4J45IDLSrryfjNHb
+X-Kong-Admin-Request-ID: ZG1HJrWBSgCDc2wz42DkGRwzZEDXF0Ia
 vary: Origin
 
 {
-    "d1cd7bc3-f6da-4d06-aeea-884894ff4bc7": {
-        "config_hash": "66f9770e92cc8e860fd7835e5d4c0adf",
-        "hostname": "kong-dp-kong-75478bfcff-sq8f6",
-        "ip": "192.168.16.247",
-        "last_seen": 1625759130
+    "595ec021-5f64-4a10-ade2-0abdb9ffe444": {
+        "config_hash": "b2c946b21b1a3c5bd3bc72ccdfc5cc78",
+        "hostname": "kong-dp-kong-848f4984dc-zshwv",
+        "ip": "192.168.32.5",
+        "last_seen": 1633013975
     }
 }
 </pre>
@@ -239,17 +281,17 @@ Use the Load Balancer created during the deployment
 
 <pre>
 $ kubectl get svc -n kong-dp kong-dp-kong-proxy --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com
+a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com
 </pre>
 
 <pre>
-$ http a6bf3f71a14a64dba850480616af8fc9-1188819016.eu-central-1.elb.amazonaws.com
+$ http a946e3cab079a49a1b6661ab62d5585f-2135097986.us-east-1.elb.amazonaws.com
 HTTP/1.1 404 Not Found
 Connection: keep-alive
 Content-Length: 48
 Content-Type: application/json; charset=utf-8
-Date: Thu, 08 Jul 2021 15:47:34 GMT
-Server: kong/2.4.1.1-enterprise-edition
+Date: Thu, 30 Sep 2021 15:00:35 GMT
+Server: kong/2.5.1.0-enterprise-edition
 X-Kong-Response-Latency: 0
 
 {
@@ -261,19 +303,61 @@ X-Kong-Response-Latency: 0
 ## Configuring Kong Manager Service
 Kong Manager is the Control Plane Admin GUI. It should get the Admin URI configured with the same Load Balancer address:
 <pre>
-kubectl patch deployment -n kong kong-kong -p "{\"spec\": { \"template\" : { \"spec\" : {\"containers\":[{\"name\":\"proxy\",\"env\": [{ \"name\" : \"KONG_ADMIN_API_URI\", \"value\": \"aeaea72cf7352414ba4ec598c8200f4a-1395366732.eu-central-1.elb.amazonaws.com:8001\" }]}]}}}}"
+kubectl patch deployment -n kong kong-kong -p "{\"spec\": { \"template\" : { \"spec\" : {\"containers\":[{\"name\":\"proxy\",\"env\": [{ \"name\" : \"KONG_ADMIN_API_URI\", \"value\": \"a9ed78cc5bb954931aec1b5bf48298f6-2098365612.us-east-1.elb.amazonaws.com:8001\" }]}]}}}}"
 </pre>
+
+<pre>
+kubectl patch deployment -n kong kong-kong -p "{\"spec\": { \"template\" : { \"spec\" : {\"containers\":[{\"name\":\"proxy\",\"env\": [{ \"name\" : \"KONG_ADMIN_GUI_URL\", \"value\": \"http:\/\/abd76df53f5584e8f800a9f9ac73d5fa-21140374.us-east-1.elb.amazonaws.com:8002\" }]}]}}}}"
+</pre>
+
+
+
+
+### Configuring Kong Dev Portal
+<pre>
+$ kubectl get service kong-kong-portalapi -n kong --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+a0e9f107ba17749e5ac1542792a049f2-1349476423.us-east-1.elb.amazonaws.com
+</pre>
+
+<pre>
+kubectl patch deployment -n kong kong-kong -p "{\"spec\": { \"template\" : { \"spec\" : {\"containers\":[{\"name\":\"proxy\",\"env\": [{ \"name\" : \"KONG_PORTAL_API_URL\", \"value\": \"http://a0e9f107ba17749e5ac1542792a049f2-1349476423.us-east-1.elb.amazonaws.com:8004\" }]}]}}}}"
+</pre>
+
+
+<pre>
+$ kubectl get service kong-kong-portal -n kong --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+a4d6e108295f5458e9cffa00856c1fb2-1667372698.us-east-1.elb.amazonaws.com
+</pre>
+
+<pre>
+kubectl patch deployment -n kong kong-kong -p "{\"spec\": { \"template\" : { \"spec\" : {\"containers\":[{\"name\":\"proxy\",\"env\": [{ \"name\" : \"KONG_PORTAL_GUI_HOST\", \"value\": \"a4d6e108295f5458e9cffa00856c1fb2-1667372698.us-east-1.elb.amazonaws.com:8003\" }]}]}}}}"
+</pre>
+
+
+
+
 
 ### Logging to Kong Manager
 Login to Kong Manager using the specific ELB:
 
 <pre>
-$ kubectl get svc -n kong kong-kong-manager --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-a9be7d6800a0c4f40b9cfac10c0fd65a-1065253554.eu-central-1.elb.amazonaws.com
+$ kubectl get service kong-kong-manager -n kong --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+abd76df53f5584e8f800a9f9ac73d5fa-21140374.us-east-1.elb.amazonaws.com
 </pre>
 
-If you redirect your browser to http://a9be7d6800a0c4f40b9cfac10c0fd65a-1065253554.eu-central-1.elb.amazonaws.com:8002 you should see the Kong Manager landing page:
-
+If you redirect your browser to http://abd76df53f5584e8f800a9f9ac73d5fa-21140374.us-east-1.elb.amazonaws.com:8002 you should see the Kong Manager landing page:
 
 ![kong_manager](/images/kong_manager.png)
+
+
+
+### Go to Kong Developer Portal
+Click on the <b>Dev Portals</b> menu option.
+
+![kong_devportals](/images/devportals.png)
+
+
+ Click on the ELB link available
+![kong_devportal](/images/devportal.png)
+
 
