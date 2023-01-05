@@ -1,22 +1,46 @@
-
-# AWSWorkshop.io Workshop
-
-This is the repository to generate the AWS Workshop from and execute with Hugo.
-
-## To Execute.
-Hugo is leveraged as the site generator. https://gohugo.io/about/what-is-hugo/
+### Hugo Theme Installation
+The Hugo Learn Theme is referenced by [git submodule](.gitmodules). To download it, run the following commands:
 
 ```
-#Install Hugo
-brew install hugo
 
-#Execute Hugo on Root of Local Clone Repo
+$ git submodule update --init --recursive
+
+$ git submodule update --remote --merge
+
+```
+
+### Hugo Installation
+
+On Mac, use brew to install the Hugo server.
+
+```
+$ brew install hugo
+```
+
+### Start the Hugo Server for Local Development
+Start the Hugo server to view your website. This will render in memory.
+
+```
 hugo server
 ```
 
-With the local Hugo server running, head to http://localhost:1313
+### Generate Your Content to Disk
+To render your pages to disk (for publishing), you can run your server with the following flag:
 
-Cheers!
+```
+hugo server --renderToDisk
+```
 
-- AWS Modernization Team
+or use the hugo command to perform a one-time generation.
 
+```
+hugo
+```
+
+## Security
+
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## License
+
+This library is licensed under the MIT-0 License. See the LICENSE file.

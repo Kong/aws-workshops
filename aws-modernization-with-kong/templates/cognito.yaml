@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: This template will launch the Modernization Workshop CI/CD Pipeline.
+Parameters:
+    PoolName:
+        Type: String
+        Description: Cognito Pool Name
+    ClientName:
+        Type: String
+        Description: ClientName 
+    CallBackUrl:
+        Type: String
+        Description: CallBackUrl
+    Domain:
+        Type: String
+        Description: Domain
+
+Resources:
+    CognitoUserPool:
+        Type: AWS::Cognito::UserPool
+        Properties: 
+            AutoVerifiedAttributes:
+            - email
+            Schema:
+            -
+                AttributeDataType: String
+                Name: email
+                Required: true
+            -
+                AttributeDataType: String
+                Name: family_name
+                Required: true
+            -
+                AttributeDataType: String
+                Name: given_name
+                Required: true
+            UsernameAttributes: 
+                - email
+            UserPoolName: !Ref PoolName
+    CognitoAppClient:
+        Type: AWS::Cognito::UserPoolClient
+        Properties: 
+            SupportedIdentityProviders:
+                - COGNITO
+            AllowedOAuthFlows:
+                - code
+            AllowedOAuthScopes:
+                - email
+                - openid
+                - profile
+                - aws.cognito.signin.user.admin
+            CallbackURLs: 
+                - !Ref CallBackUrl
+            ClientName: !Ref ClientName
+            # EnableTokenRevocation: True
+            ExplicitAuthFlows: 
+                - ALLOW_USER_PASSWORD_AUTH
+                - ALLOW_REFRESH_TOKEN_AUTH
+            GenerateSecret: true
+            PreventUserExistenceErrors: ENABLED
+            ReadAttributes: 
+                - email
+                - family_name
+                - given_name
+            UserPoolId: !Ref CognitoUserPool
+            AllowedOAuthFlowsUserPoolClient: true
+            WriteAttributes: 
+                - email
+                - family_name
+                - given_name
+    CognitoDomain:
+        Type: AWS::Cognito::UserPoolDomain
+        Properties: 
+            Domain: !Ref Domain
+            UserPoolId: !Ref CognitoUserPool
+
+Outputs:
+    ClientId:
+        Value: !Ref CognitoAppClient
+    PoolId:
+        Value: !Ref CognitoUserPool
+    
