@@ -1,10 +1,10 @@
 +++
-title = "Kong on AWS Workshop"
+title = "Kong Konnect on AWS Workshop"
 chapter = true
 weight = 1
 +++
 
-![kong](/images/kong.png)
+![kong](/images/konnect.png)
 
 In this workshop you will learn why API Gateway is a pattern for modernization and how to use patterns with Kong to:
 
@@ -13,7 +13,7 @@ In this workshop you will learn why API Gateway is a pattern for modernization a
 *   Create a Developer Platform - Provide an internal developer platform built for distributed architectures.
 *   Offload critical and complex processing out of services and microservices.
 
-Kong Gateway is a Service Connectivity platform that provides technology teams at multi-cloud and hybrid organizations the “architectural freedom” to build APIs and services anywhere. Kong’s Service Connectivity Platform provides a ﬂexible, technology-agnostic platform that supports any cloud, platform, protocol and architecture. Kong Gateway supports the full lifecycle of service management, enabling users to easily design, test, secure, deploy, monitor, monetize and version their APIs.
+Konnect is an API lifecycle management platform designed from the ground up for the cloud native era and delivered as a service. This platform lets you build modern applications better, faster, and more securely. The management plane is hosted in the cloud by Kong, while the runtime engine, Kong Gateway — Kong’s lightweight, fast, and flexible API gateway — is managed by you within your preferred network environment.
 
 {{% notice warning %}}
 <p style='text-align: left;'>
