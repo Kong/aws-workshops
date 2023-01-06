@@ -8,7 +8,7 @@ Every organization is under pressure to innovate by providing compelling digital
 Organizations break down legacy monolithic applications into smaller modern services, or they build new
 cloud native apps using microservices. The number of APIs is exploding, and connectivity between services becomes the critical backbone of your applications.
 
-Kong Gateway helps address these challenges by providing reliable, secure and observable connectivity for all services across any infrastructure. The platform provides full lifecycle API management to:
+Kong Konnect helps address these challenges by providing reliable, secure and observable connectivity for all services across any infrastructure. The platform provides full lifecycle API management to:
 
 * Design, test and document APIs and microservices
 * Connect services across any infrastructure

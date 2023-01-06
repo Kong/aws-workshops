@@ -7,7 +7,7 @@ pre = "<b>1. </b>"
 
 Today we are going to learn the following topics:
 
-* Kong Konnect - A lightweight API Gateway that lets you secure, manage, and extend APIs and microservices.
+* Kong Konnect - An end-to-end SaaS API lifecycle management platform that is designed for the cloud native era and provides the easiest way to get started with Kong Gateway. The global control plane is hosted in the cloud by Kong, while the runtime engine, Kong Gateway, runs within your preferred network environment.
 * Kong Gateway - A lightweight API Gateway that lets you secure, manage, and extend APIs and microservices.
 * Provision and Configure Kong Gateway in Hybrid Mode in Amazon Elastic Kubernetes Service (EKS)
 * Configure telemetry using Prometheus, Grafana, AWS CloudWatch and elasticity

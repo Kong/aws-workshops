@@ -1,56 +1,53 @@
 +++
-title = "What is Kong?"
+title = "What is Kong Konnect?"
 weight = 13
 +++
 
-Kong Gateway is Kong’s API gateway with enterprise functionality. As part of Kong Konnect, the gateway brokers an organization’s information across all services by allowing customers to manage the full lifecycle of services and APIs. On top of that, it enables users to simplify the management of APIs and microservices across hybrid-cloud and multi-cloud deployments.
+Konnect is an API lifecycle management platform designed from the ground up for the cloud native era and delivered as a service. This platform lets you build modern applications better, faster, and more securely. The management plane is hosted in the cloud by Kong, while the runtime engine, Kong Gateway — Kong’s lightweight, fast, and flexible API gateway — is managed by you within your preferred network environment.
 
-Kong Gateway is designed to run on decentralized architectures, leveraging workflow automation and modern GitOps practices. With Kong Gateway, users can:
+Kong Konnect is designed to run on decentralized architectures, leveraging workflow automation and modern GitOps practices. With Kong Konnect, users can:
 
-* Decentralize applications/services and transition to microservices
-* Create a thriving API developer ecosystem
-* Proactively identify API-related anomalies and threats
-* Secure and govern APIs/services, and improve API visibility across the entire organization
+* Offering a single management plane to deploy and manage your APIs and microservices in any environment: cloud, on-premises, Kubernetes, and virtual machines.
+* Instantly applying authentication, API security, and traffic control policies consistently across all your services using powerful enterprise and community plugins.
+* Providing a real-time, centralized view of all your services. Monitor golden signals such as error rate and latency for each service and route to gain deep insights into your API products.
 
-Kong Gateway is a combination of several features and modules built on top of the open-sourced Kong Gateway, as shown in the diagram and described in the next section, Kong Gateway Enterprise Features.
+Kong Konnect is a combination of several features and modules, as shown in the diagram and described in the next section, Kong Konnect Enterprise Features.
 
 ![introduction](/images/introduction.png)
 
 
-## Kong Gateway Enterprise Features
+## Kong Konnect Enterprise Features
 Kong Gateway Enterprise features are described in this section, including modules and plugins that extend and enhance the functionality of the Kong Konnect platform.
 
-### Kong Gateway (OSS)
-Kong Gateway (OSS) is a lightweight, fast, and flexible cloud-native API gateway. It’s easy to download, install, and configure to get up and running once you know the basics. The gateway runs in front of any RESTful API and is extended through modules and plugins which provide extra functionality beyond the core platform.
 
-### Kong Admin API
-Kong Admin API provides a RESTful interface for administration and configuration of Services, Routes, Plugins, and Consumers. All of the tasks you perform in the Kong Manager can be automated using the Kong Admin API. For more information, see Kong Admin API.
+### Service Hub
+Service Hub makes internal APIs discoverable, consumable, and reusable for internal development teams. Catalog all your services through the Service Hub to create a single source of truth for your organization’s service inventory. By leveraging Service Hub, your application developers can search, discover, and consume existing services to accelerate their time-to-market, while enabling a more consistent end-user experience across the organization’s applications.
 
-### Kong Developer Portal
-Kong Developer Portal (Kong Dev Portal) is used to onboard new developers and to generate API documentation, create custom pages, manage API versions, and secure developer access. For more information, see Kong Developer Portal.
+### Runtime Manager
+Runtime Manager empowers your teams to securely collaborate and manage their own set of runtimes and services without the risk of impacting other teams and projects. Runtime Manager instantly provisions hosted Kong Gateway control planes and supports securely attaching Kong Gateway data planes from your cloud or hybrid environments.
 
-### Kubernetes Ingress Controller
-Kong for Kubernetes Enterprise (K4K8S) is a Kubernetes Ingress Controller. A Kubernetes Ingress Controller is a proxy that exposes Kubernetes services from applications (for example, Deployments, ReplicaSets) running on a Kubernetes cluster to client applications running outside of the cluster. The intent of an Ingress Controller is to provide a single point of control for all incoming traffic into the Kubernetes cluster. For more information, see Kong for Kubernetes.
+Through the Runtime Manager, increase the security of your APIs with out-of-the-box enterprise and community plugins, including OpenID Connect, Open Policy Agent, Mutual TLS, and more.
 
-### Kong Manager
-Kong Manager is the Graphical User Interface (GUI) for Kong Gateway Enterprise. It uses the Kong Admin API under the hood to administer and control Kong Gateway (OSS). Use Kong Manager to organize teams, adjust policies, and monitor performance with just a few clicks. Group your teams, services, plugins, consumer management, and more exactly how you want them. Create new routes and services, activate or deactivate plugins in seconds. For more information, see the Kong Manager Guide.
+### Dev Portal
+Streamline developer onboarding with the Dev Portal, which offers a self-service developer experience to discover, register, and consume published services from your Service Hub catalog. This customizable experience can be used to match your own unique branding and highlights the documentation and interactive API specifications of your services. Enable application registration to automatically secure your APIs with a variety of authorization providers.
+
+### Analytics
+Use Analytics to gain deep insights into service, route, and application usage and health monitoring data. Keep your finger on the pulse of the health of your API products with custom reports and contextual dashboards. In addition, you can enhance the native monitoring and analytics capabilities with Kong Gateway plugins that enable streaming monitoring metrics to third-party analytics providers, such as Datadog and Prometheus.
+
+### Teams
+To help secure and govern your environment, Konnect provides the ability to manage authorization with teams. You can use Konnect’s predefined teams for a standard set of roles, or create custom teams with any roles you choose. Invite users and add them to these teams to manage user access. You can also map groups from your existing identity provider into Konnect teams.
 
 ### Kong Plugins
-Kong Gateway plugins provide advanced functionality to better manage your API and microservices. With turnkey capabilities to meet the most challenging use cases, Kong Gateway Enterprise plugins ensure maximum control and minimizes unnecessary overhead. Enable features like authentication, rate-limiting, and transformations by enabling Kong Gateway Enterprise plugins through Kong Manager or the Admin API. For more information on which plugins are Enterprise-only, see the Kong Hub.
+Kong Konnect plugins provide advanced functionality to better manage your API and microservices. With turnkey capabilities to meet the most challenging use cases, Kong Enterprise plugins ensure maximum control and minimizes unnecessary overhead. Enable features like authentication, rate-limiting, and transformations by enabling Kong Enterprise plugins. For more information on which plugins are Enterprise-only, see the [Kong Hub](https://docs.konghq.com/hub/).
 
-### Kong Vitals
-Kong Vitals provides useful metrics about the health and performance of your Kong Gateway Enterprise nodes, as well as metrics about the usage of your gateway-proxied APIs. You can visually monitor vital signs and pinpoint anomalies in real-time, and use visual API analytics to see exactly how your APIs and Gateway are performing and access key statistics. Kong Vitals is part of the Kong Manager UI. For more information, see Kong Vitals.
-
-### Insomnia
-Insomnia enables spec-first development for all REST and GraphQL services. With Insomnia, organizations can accelerate design and test workflows using automated testing, direct Git sync, and inspection of all response types. Teams of all sizes can use Insomnia to increase development velocity, reduce deployment risk, and increase collaboration. For more information, see Insomnia documentation.
 
 
 
 ## Key Concepts and Terminology
-Kong Gateway Enterprise uses common terms for entities and processes that have a specific meaning in context. This topic provides a conceptual overview of terms, and how they apply to Kong’s use cases.
+Kong Konnect Enterprise uses common terms for entities and processes that have a specific meaning in context. This topic provides a conceptual overview of terms, and how they apply to Kong’s use cases.
 
 ### Admin
-An Admin is a Kong Gateway user account capable of accessing the Admin API or Kong Manager. With RBAC and Workspaces, access can be modified and limited to specific entities.
+An Admin is a Kong Konnect user account capable of accessing the Admin API or Kong Konnect UI. With RBAC, access can be modified and limited to specific entities.
 
 ### Authentication
 Authentication is the process by which a system validates the identity of a user account. It is a separate concept from authorization.
@@ -58,7 +55,7 @@ Authentication is the process by which a system validates the identity of a user
 API gateway authentication is an important way to control the data that is allowed to be transmitted to and from your APIs. An API may have a restricted list of identities that are authorized to access it. Authentication is the process of proving an identity.
 
 ### Authorization
-Authorization is the system of defining access to certain resources. In Kong Gateway, Role-Based Access Control (RBAC) is the main authorization mode. To define authorization to an API, it is possible to use the ACL Plugin in conjunction with an authentication plugin.
+Authorization is the system of defining access to certain resources. In Kong Gateway, Role-Based Access Control (RBAC) is the main authorization mode. To define authorization to an API, it is possible to use the ACL Plugin or OPA Plugin in conjunction with an authentication plugin.
 
 ### Client
 A Kong Client refers to the downstream client making requests to Kong’s proxy port. It could be another service in a distributed application, a user’s identity, a user’s browser, or a specific device.
@@ -83,7 +80,7 @@ A Permission is a policy representing the ability to create, read, update, or de
 Plugins provide advanced functionality and extend the use of Kong Gateway, allowing you to add new features to your gateway. Plugins can be configured to run in a variety of contexts, ranging from a specific route to all upstreams. Plugins can perform operations in your environment, such as authentication, rate-limiting, or transformations on a proxied request.
 
 ### Proxy
-Kong is a reverse proxy that manages traffic between clients and hosts. As a gateway, Kong’s proxy functionality evaluates any incoming HTTP request against the Routes you have configured to find a matching one. If a given request matches the rules of a specific Route, Kong processes proxying the request. Because each Route is linked to a Service, Kong runs the plugins you have configured on your Route and its associated Service and then proxies the request upstream.
+Kong Runtime is a reverse proxy that manages traffic between clients and hosts. As a gateway, Kong’s proxy functionality evaluates any incoming HTTP request against the Routes you have configured to find a matching one. If a given request matches the rules of a specific Route, Kong processes proxying the request. Because each Route is linked to a Service, Kong runs the plugins you have configured on your Route and its associated Service and then proxies the request upstream.
 
 ### Proxy Caching
 One of the key benefits of using a reverse proxy is the ability to cache frequently-accessed content. The benefit is that upstream services do not need to waste computation on repeated requests.
@@ -104,7 +101,7 @@ Rate Limiting allows you to restrict how many requests your upstream services re
 In this workflow, we are going to enable the Rate Limiting Advanced Plugin. This plugin provides support for the sliding window algorithm to prevent the API from being overloaded near the window boundaries and adds Redis support for greater performance.
 
 ### Role
-A Role is a set of permissions that may be reused and assigned to Admins. For example, this diagram shows multiple admins assigned to a single shared role that defines permissions for a set of objects in a workspace.
+A Role is a set of permissions that may be reused and assigned to Admins.
 
 ### Route
 A Route, also referred to as Route object, defines rules to match client requests to upstream services. Each Route is associated with a Service, and a Service may have multiple Routes associated with it. Routes are entry-points in Kong and define rules to match client requests. Once a Route is matched, Kong proxies the request to its associated Service. See the Proxy Reference for a detailed explanation of how Kong proxies traffic.
@@ -115,38 +112,25 @@ A Service, also referred to as a Service object, is the upstream APIs and micros
 Before you can start making requests against a Service, you need to add a Route to it. Routes specify how (and if) requests are sent to their Services after they reach Kong. A single Service can have many Routes. After configuring the Service and the Route, you’ll be able to make requests through Kong using them.
 
 ### Super Admin
-A Super Admin, or any Role with read and write access to the /admins and /rbac endpoints, creates new Roles and customize Permissions. A Super Admin can:
+A Super Admin can:
 
 * Invite and disable other Admin accounts
 * Assign and revoke Roles to Admins
 * Create new Roles with custom Permissions
-* Create new Workspaces
 
 ### Tags
 Tags are customer defined labels that let you manage, search for, and filter core entities using the ?tags querystring parameter. Each tag must be composed of one or more alphanumeric characters, \_\, -, . or ~. Most core entities can be tagged via their tags attribute, upon creation or edition.
 
-### Teams
-Teams organize developers into working groups, implements policies across entire environments, and onboards new users while ensuring compliance. Role-Based Access Control (RBAC) and Workspaces allow users to assign administrative privileges and grant or limit access privileges to individual users and consumers, entire teams, and environments across the Kong platform.
-
 ### Upstream
 An Upstream object refers to your upstream API/service sitting behind Kong, to which client requests are forwarded. An Upstream object represents a virtual hostname and can be used to load balance incoming requests over multiple services (targets). For example, an Upstream named service.v1.xyz for a Service object whose host is service.v1.xyz. Requests for this Service object would be proxied to the targets defined within the upstream.
 
-### Workspaces
-Workspaces enable an organization to segment objects and admins into namespaces. The segmentation allows teams of admins sharing the same Kong cluster to adopt roles for interacting with specific objects. For example, one team (Team A) may be responsible for managing a particular service, whereas another team (Team B) may be responsible for managing another service.
-
-Many organizations have strict security requirements. For example, organizations need the ability to segregate the duties of an administrator to ensure that a mistake or malicious act by one administrator does not cause an outage.
 
 
-
-
-
-## Try Kong Gateway Enterprise
-Kong Gateway is available in free mode. Download it and start testing out Gateway’s open source features with Kong Manager today.
-
-Kong Gateway is also bundled with Kong Konnect. There are a few ways to test out the gateway’s Plus or Enterprise features:
+## Try Kong Konnect Enterprise
+Kong Konnect is available in [free, plus and enterprise modes](https://konghq.com/pricing) 
 
 Sign up for a free trial of [Kong Konnect Plus](https://cloud.konghq.com/register).
-Try out Kong Gateway on Kubernetes using a live tutorial at [Kong for Kubernetes](https://education.konghq.com/courses/course-v1:kong+KGLL-108+Perpetual/about).
+
 If you are interested in evaluating Enterprise features locally, the Kong sales team manages evaluation licenses as part of a formal sales process. The best way to get started with the sales process is to request a demo and indicate your interest.
 
 
